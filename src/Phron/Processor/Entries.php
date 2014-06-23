@@ -14,4 +14,10 @@ class Entries
         // constructor
     }
     
+    
+    public function add()
+    {
+        //
+    }
+    
 }
