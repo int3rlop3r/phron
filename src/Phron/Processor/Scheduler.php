@@ -1,12 +1,4 @@
-<?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-namespace Phron\Processor;
+<?php namespace Phron\Processor;
 
 /**
  * Description of Scheduler
@@ -26,4 +18,6 @@ class Scheduler
     {
         return $this->expression;
     }
+    
+    
 }
