@@ -15,11 +15,21 @@ class SchedulerTest extends PHPUnit_Framework_TestCase
 		$this->scheduler = new Scheduler;
 	}
     
-	public function testAddCronJob()
+	public function testAnswers()
 	{
-        $cronExp = $this->scheduler->get();
-        
-        $this->assertEquals('* * * * *', $cronExp);
+        $answersArray = $this->scheduler->getAnswers();
+        $this->assertCount(6, $answersArray);
+
+        // check each value
+        foreach ($answersArray as $key => $answer) {
+            if ($key == 'command') {
+                $this->assertEquals('-', $answer);
+            } else {
+                $this->assertEquals('*', $answer);
+            }
+        }
+
+        $this->scheduler->answerQuestion('');
 	}
     
 }

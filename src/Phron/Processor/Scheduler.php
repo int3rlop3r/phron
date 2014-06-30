@@ -1,23 +1,72 @@
 <?php namespace Phron\Processor;
 
-/**
- * Description of Scheduler
- *
- * @author jonathan
- */
+
 class Scheduler
 {
-    private $expression;
-    
+    private $answers = array(
+        'minutes'  => '*',
+        'hours'    => '*',
+        'days'     => '*',
+        'months'   => '*',
+        'weekdays' => '*',
+        'command'  => '-',
+    );
+
+    private $mainQuestions = array();
+
+    private $subQuestions  = array();
+
+    private $questionKeyException;
+
     public function __construct()
     {
-        $this->expression = '* * * * *';
+        $this->questionKeyException = new \Exception('Invlaid Question Key');
     }
-    
-    public function get()
+
+    /**
+     * Returns an array of answers
+     *
+     * @return array
+     */
+    public function getAnswers()
     {
-        return $this->expression;
+        return $this->answers;
     }
-    
-    
+
+    /**
+     * Sets a value of an answer using a question's key
+     *
+     * @param string $questionKey
+     * @param string $answer
+     * @throws \Exception
+     * @return void
+     */
+    public function answerQuestion($questionKey, $answer = '*')
+    {
+        if (isset($this->answers[$questionKey])) {
+            $this->answers[$questionKey] = $answer;
+        } else {
+            throw $this->questionKeyException;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Gets an answers based on the question key
+     *
+     * @param string $questionKey
+     * @throws \Exception
+     * @return string
+     */
+    public function getAnswer($questionKey)
+    {
+        if (!isset($this->answers[$questionKey])) {
+            throw $this->questionKeyException;
+        }
+
+        return $this->answers[$questionKey];
+    }
+
+
 }

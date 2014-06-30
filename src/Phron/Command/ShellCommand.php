@@ -8,20 +8,7 @@ class ShellCommand extends Command
 {
     use \Phron\Command\Command;
     
-    private $questions = array(
-            'minutes' => '*',
-            * &selectMinutes%5B%5D=0
-            * &hours=select
-            * &selectHours%5B%5D=0
-            * &days=*
-            * &months=*
-            * &weekdays=*
-            * &command=vdfvd
-            * &output=1
-            * &filePath=
-            * &outputEmail=
-            * &Generate=Generate+Crontab+Line
-    );
+
     
     protected function configure()
     {
