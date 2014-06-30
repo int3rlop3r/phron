@@ -69,24 +69,32 @@ class SchedulerTest extends PHPUnit_Framework_TestCase
         
 	}
 	
+	public function testQuestions()
+	{
+	    $questions = $this->scheduler->getQuestions();
+	    
+	    $this->assertCount(6, $questions);
+	}
+	
+	public function testSubQuestions()
+	{
+	    $subQuestions = $this->scheduler->getSubQuestions();
+	    
+	    $this->assertCount(6, $subQuestions);
+	}
+	
 	public function testStack()
 	{
 	    $stack = $this->scheduler->getStack();
 	    
 	    $this->assertCount(6, $stack);
-	}
-	
-	public function testQuestions()
-	{
-	    $questions = $this->scheduler->getQuestions();
-        $this->assertCount(6, $questions);
-        
-        
-	}
-	
-	public function testSubQuestions()
-	{
-	    //
+	    
+	    foreach ($stack as $item) {
+	        $question    = $this->scheduler->getQuestion($item);
+	        $subQuestion = $this->scheduler->getSubQuestion($item);
+	        $answer      = $this->scheduler->getAnswer($item);
+	    }
+	    
 	}
 	
 }
