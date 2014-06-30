@@ -80,7 +80,7 @@ class SchedulerTest extends PHPUnit_Framework_TestCase
 	{
 	    $subQuestions = $this->scheduler->getSubQuestions();
 	    
-	    $this->assertCount(6, $subQuestions);
+	    $this->assertCount(5, $subQuestions);
 	}
 	
 	public function testStack()

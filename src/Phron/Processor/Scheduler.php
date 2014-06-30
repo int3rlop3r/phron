@@ -3,6 +3,8 @@
 
 class Scheduler
 {
+    private $answers = array();
+
     private $stack = array(
         'minutes',
         'hours',
@@ -11,33 +13,90 @@ class Scheduler
         'weekdays',
         'command',
     );
-    
-    private $answers = array();
-//         'minutes'  => '*',
-//         'hours'    => '*',
-//         'days'     => '*',
-//         'months'   => '*',
-//         'weekdays' => '*',
-//         'command'  => '-',
-//     );
 
-    private $questions = array();
+    private $questions = array(
+            'Every Minute ( y / n ): ',
+            'Every Hour  ( y / n ): ',
+            'Every Day  ( y / n ): ',
+            'Every Month ( y / n ): ',
+            'Every Day of the week ( y / n ): ',
+            'Command to execute: ',
+        );
 
-    private $subQuestions  = array();
-    
-    private $stackItemException;
+    private $subQuestions  = array(
+            'Enter Minutes [0-59]: ',
+            'Enter Hours [0-23]: ',
+            'Enter Days [1-31]: ',
+            'Enter Months [1-12]: ',
+            'Enter Day of the week [0-7]: ',
+        );
 
     public function __construct()
     {
-        $this->stackItemException = new \Exception('Invlaid Question Key');
-        
-        // initialise the answers array
+        $this->initAnswers();
+        $this->initQuestions();
+        $this->initSubQuestions();
+    }
+
+    /**
+     * Initializes the answers array
+     *
+     * @return $this
+     */
+    private function initAnswers()
+    {
         foreach ($this->stack as $item) {
+
             if ($item == 'command') {
-                $this->answers[$item] = '-';                
+                $this->answers[$item] = '-';
             } else {
                 $this->answers[$item] = '*';
             }
+
+        }
+
+        return $this;
+    }
+
+    /**
+     * Initializes the questions array
+     * 
+     * @return $this
+     */
+    public function initQuestions()
+    {
+        foreach ($this->questions as $key => $question) {
+
+            if (!isset($this->stack[$key])) {
+                throw new Exception('Stack offset does not exist: ' . $key);
+            }
+
+            $newKey = $this->stack[$key];
+
+            $this->questions[$newKey] = $question;
+
+            unset($this->questions[$key]);
+        }
+    }
+
+    /**
+     * Initializes the questions array
+     * 
+     * @return $this
+     */
+    public function initSubQuestions()
+    {
+        foreach ($this->subQuestions as $key => $question) {
+
+            if (!isset($this->stack[$key])) {
+                throw new Exception('Stack offset does not exist: ' . $key);
+            }
+
+            $newKey = $this->stack[$key];
+
+            $this->subQuestions[$newKey] = $question;
+
+            unset($this->subQuestions[$key]);
         }
     }
 
@@ -64,7 +123,7 @@ class Scheduler
         if (isset($this->answers[$stackItem])) {
             $this->answers[$stackItem] = strval($answer);
         } else {
-            throw $this->stackItemException;
+            throw new \Exception('Invlaid Stack Item: ' . $stackItem);
         }
 
         return $this;
@@ -80,7 +139,7 @@ class Scheduler
     public function getAnswer($stackItem)
     {
         if (!isset($this->answers[$stackItem])) {
-            throw $this->stackItemException;
+            throw new \Exception('Invlaid Stack Item: ' . $stackItem);
         }
 
         return $this->answers[$stackItem];
@@ -95,7 +154,13 @@ class Scheduler
     {
         return $this->questions;
     }
-    
+
+    /**
+     * Returns a question based on the stack item
+     *
+     * @param string $stackItem
+     * @return string
+     */
     public function getQuestion($stackItem)
     {
         //
@@ -110,7 +175,18 @@ class Scheduler
     {
         return $this->subQuestions;
     }
-    
+
+    /**
+     * Returns a sub question based on the stack item
+     * 
+     * @param string $stackItem
+     * @return array
+     */
+    public function getSubQuestion($stackItem)
+    {
+        //
+    }
+
     /**
      * Returns a stack
      * 
