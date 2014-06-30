@@ -20,16 +20,73 @@ class SchedulerTest extends PHPUnit_Framework_TestCase
         $answersArray = $this->scheduler->getAnswers();
         $this->assertCount(6, $answersArray);
 
-        // check each value
+        // check default values
         foreach ($answersArray as $key => $answer) {
+            
+            // testing the get answer function
+            $funcAnswer = $this->scheduler->getAnswer($key);
+            
             if ($key == 'command') {
+                
+                
                 $this->assertEquals('-', $answer);
+                $this->assertEquals('-', $funcAnswer);
+                
             } else {
+                
                 $this->assertEquals('*', $answer);
+                $this->assertEquals('*', $funcAnswer);
             }
         }
 
-        $this->scheduler->answerQuestion('');
+        $this->scheduler->answerQuestion('minutes', 0);
+        $this->scheduler->answerQuestion('hours', 0);
+        $this->scheduler->answerQuestion('days', 0);
+        $this->scheduler->answerQuestion('months', 0);
+        $this->scheduler->answerQuestion('weekdays', 0);
+        $this->scheduler->answerQuestion('command', 'ls');
+        
+        $answersArray = $this->scheduler->getAnswers();
+        $this->assertCount(6, $answersArray);
+        // check recheck values
+        foreach ($answersArray as $key => $answer) {
+        
+            // testing the get answer function
+            $funcAnswer = $this->scheduler->getAnswer($key);
+        
+            if ($key == 'command') {
+        
+        
+                $this->assertEquals('ls', $answer);
+                $this->assertEquals('ls', $funcAnswer);
+        
+            } else {
+        
+                $this->assertEquals('0', $answer);
+                $this->assertEquals('0', $funcAnswer);
+            }
+        }
+        
 	}
-    
+	
+	public function testStack()
+	{
+	    $stack = $this->scheduler->getStack();
+	    
+	    $this->assertCount(6, $stack);
+	}
+	
+	public function testQuestions()
+	{
+	    $questions = $this->scheduler->getQuestions();
+        $this->assertCount(6, $questions);
+        
+        
+	}
+	
+	public function testSubQuestions()
+	{
+	    //
+	}
+	
 }

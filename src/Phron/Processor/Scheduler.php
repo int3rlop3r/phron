@@ -44,7 +44,7 @@ class Scheduler
     public function answerQuestion($questionKey, $answer = '*')
     {
         if (isset($this->answers[$questionKey])) {
-            $this->answers[$questionKey] = $answer;
+            $this->answers[$questionKey] = strval($answer);
         } else {
             throw $this->questionKeyException;
         }
