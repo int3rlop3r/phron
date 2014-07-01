@@ -15,21 +15,21 @@ class Scheduler
     );
 
     private $questions = array(
-            'Every Minute ( y / n ): ',
-            'Every Hour  ( y / n ): ',
-            'Every Day  ( y / n ): ',
-            'Every Month ( y / n ): ',
-            'Every Day of the week ( y / n ): ',
-            'Command to execute: ',
-        );
+        'Every Minute ( y / n ): ',
+        'Every Hour  ( y / n ): ',
+        'Every Day  ( y / n ): ',
+        'Every Month ( y / n ): ',
+        'Every Day of the week ( y / n ): ',
+        'Command to execute: ',
+    );
 
     private $subQuestions  = array(
-            'Enter Minutes [0-59]: ',
-            'Enter Hours [0-23]: ',
-            'Enter Days [1-31]: ',
-            'Enter Months [1-12]: ',
-            'Enter Day of the week [0-7]: ',
-        );
+        'Enter Minutes [0-59]: ',
+        'Enter Hours [0-23]: ',
+        'Enter Days [1-31]: ',
+        'Enter Months [1-12]: ',
+        'Enter Day of the week [0-7]: ',
+    );
 
     public function __construct()
     {
@@ -87,7 +87,7 @@ class Scheduler
     public function initSubQuestions()
     {
         foreach ($this->subQuestions as $key => $question) {
-
+            
             if (!isset($this->stack[$key])) {
                 throw new Exception('Stack offset does not exist: ' . $key);
             }
@@ -163,7 +163,11 @@ class Scheduler
      */
     public function getQuestion($stackItem)
     {
-        //
+        if (!isset($this->questions[$stackItem])) {
+            throw new \Exception('Invalid Stack Item: ' . $stackItem);
+        }
+
+        return $this->questions[$stackItem];
     }
     
     /**
@@ -184,7 +188,11 @@ class Scheduler
      */
     public function getSubQuestion($stackItem)
     {
-        //
+       if (!isset($this->subQuestions[$stackItem])) {
+           throw new \Exception('Invalid Stack Item: ' . $stackItem);
+       }
+       
+       return $this->subQuestions[$stackItem];
     }
 
     /**

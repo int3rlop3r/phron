@@ -10,13 +10,13 @@ class SchedulerTest extends PHPUnit_Framework_TestCase
 {
     private $scheduler;
     
-	public function setUp()
-	{
-		$this->scheduler = new Scheduler;
-	}
+    public function setUp()
+    {
+        $this->scheduler = new Scheduler;
+    }
     
-	public function testAnswers()
-	{
+    public function testAnswers()
+    {
         $answersArray = $this->scheduler->getAnswers();
         $this->assertCount(6, $answersArray);
 
@@ -67,34 +67,43 @@ class SchedulerTest extends PHPUnit_Framework_TestCase
             }
         }
         
-	}
+    }
 	
-	public function testQuestions()
-	{
-	    $questions = $this->scheduler->getQuestions();
-	    
-	    $this->assertCount(6, $questions);
-	}
+    public function testQuestions()
+    {
+        $questions = $this->scheduler->getQuestions();
+
+        $this->assertCount(6, $questions);
+    }
 	
-	public function testSubQuestions()
-	{
-	    $subQuestions = $this->scheduler->getSubQuestions();
-	    
-	    $this->assertCount(5, $subQuestions);
-	}
-	
-	public function testStack()
-	{
-	    $stack = $this->scheduler->getStack();
-	    
-	    $this->assertCount(6, $stack);
-	    
-	    foreach ($stack as $item) {
-	        $question    = $this->scheduler->getQuestion($item);
-	        $subQuestion = $this->scheduler->getSubQuestion($item);
-	        $answer      = $this->scheduler->getAnswer($item);
-	    }
-	    
-	}
-	
+    public function testSubQuestions()
+    {
+        $subQuestions = $this->scheduler->getSubQuestions();
+        $this->assertCount(5, $subQuestions);
+    }
+
+    public function testStack()
+    {
+        $stack = $this->scheduler->getStack();
+
+        $this->assertCount(6, $stack);
+
+        foreach ($stack as $item) {
+            $question       = $this->scheduler->getQuestion($item);
+            $answer         = $this->scheduler->getAnswer($item);
+
+            $this->assertNotNull($question);
+            $this->assertNotNull($answer);
+
+            if ($item != 'command') {
+                $subQuestion = $this->scheduler->getSubQuestion($item);
+                $this->assertNotNull($subQuestion);
+            }
+        }
+    }
+    
+    public function testFlow()
+    {
+        //
+    }
 }

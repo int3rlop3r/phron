@@ -1,14 +1,23 @@
 <?php namespace Phron\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Phron\Processor\Scheduler;
+
+//use Symfony\Component\Console\Input\InputArgument;
+//use Symfony\Component\Console\Input\InputOption;
 
 class ShellCommand extends Command
 {
     use \Phron\Command\Command;
     
-
+    private $scheduler;
+    
+    public function __construct(Scheduler $scheduler)
+    {
+        parent::__construct();
+        
+        $this->scheduler = $scheduler;
+    }
     
     protected function configure()
     {
@@ -19,10 +28,18 @@ class ShellCommand extends Command
 
     protected function fire()
     {
-        while(($userInput = $this->ask('>')) != 'quit') {
+        $stack = $this->scheduler->getStack();
+        
+        foreach ($stack as $stackItem) {
             
+            $question  = $this->scheduler->getQuestion($stackItem);
+            
+            $userInput = $this->ask($question);
+            
+            if ($userInput == 'quit') {
+                $this->output->writeln('Bye');
+                break;
+            }
         }
-
-        $this->output->writeln("Bye");
     }
 }
