@@ -15,12 +15,12 @@ class Scheduler
     );
 
     private $questions = array(
-        'Every Minute ( y / n ): ',
-        'Every Hour  ( y / n ): ',
-        'Every Day  ( y / n ): ',
-        'Every Month ( y / n ): ',
-        'Every Day of the week ( y / n ): ',
-        'Command to execute: ',
+        "Every Minute [y/n]: ", 
+        "Every Hour [y/n]: ", 
+        "Every Day [y/n]: ", 
+        "Every Month [y/n]: ", 
+        "Every Day of the week [y/n]: ", 
+        "Command to execute: ", 
     );
 
     private $subQuestions  = array(
@@ -101,16 +101,6 @@ class Scheduler
     }
 
     /**
-     * Returns an array of answers
-     *
-     * @return array
-     */
-    public function getAnswers()
-    {
-        return $this->answers;
-    }
-
-    /**
      * Sets a value of an answer using a question's key
      *
      * @param string $stackItem
@@ -127,6 +117,16 @@ class Scheduler
         }
 
         return $this;
+    }
+
+    /**
+     * Returns an array of answers
+     *
+     * @return array
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
     }
 
     /**

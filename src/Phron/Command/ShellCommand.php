@@ -36,10 +36,26 @@ class ShellCommand extends Command
             
             $userInput = $this->ask($question);
             
-            if ($userInput == 'quit') {
-                $this->output->writeln('Bye');
-                break;
+            if ((strtolower($userInput) == 'n' || strtolower($userInput) == 'no')
+                && $stackItem != 'command')
+            {
+                $subQuestion = $this->scheduler->getSubQuestion($stackItem);
+                $userInput   = $this->ask($subQuestion);
+            } elseif ((strtolower($userInput) == 'y' || strtolower($userInput) == 'yes')
+                && $stackItem != 'command')
+            {
+                $userInput = '*';
+            } elseif ($stackItem == 'command' && trim($userInput) == '') {
+                
+                do {
+                    
+                    $userInput = $this->ask('Invalid input, please try again: ');
+                    
+                } while(trim($userInput) == '');
             }
+            
         }
+            
+        $this->scheduler->answerQuestion($stackItem, $userInput);
     }
 }
