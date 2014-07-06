@@ -104,6 +104,16 @@ class SchedulerTest extends PHPUnit_Framework_TestCase
     
     public function testFlow()
     {
-        //
+        $stack = $this->scheduler->getStack();
+
+        $stackItem = array_shift($stack);
+
+        $question = $this->scheduler->getQuestion($stackItem);
+
+        $this->scheduler->answerQuestion($stackItem, '*');
+
+        $answer = $this->scheduler->getAnswer($stackItem);
+
+        $this->assertEquals('*', $answer);
     }
 }

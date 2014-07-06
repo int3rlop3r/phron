@@ -5,16 +5,17 @@
  * @author Jonathan Fernandes <int3rlop3r@yahoo.in>
  */
 
+use Crontab\Job;
 
 class Entries
 {
-    
-    public function __construct()
+    private $job;
+
+    public function __construct(Job $job)
     {
-        // constructor
+        $this->job = $job;
     }
-    
-    
+
     public function add()
     {
         //

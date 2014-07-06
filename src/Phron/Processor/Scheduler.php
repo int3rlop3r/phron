@@ -204,4 +204,9 @@ class Scheduler
     {
         return $this->stack;
     }
+
+    public function getExpression()
+    {
+        return $this->getAnswers();
+    }
 }
