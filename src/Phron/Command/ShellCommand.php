@@ -6,19 +6,27 @@ use Phron\Processor\Scheduler;
 //use Symfony\Component\Console\Input\InputArgument;
 //use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * Class ShellCommand
+ * @package Phron\Command
+ */
 class ShellCommand extends Command
 {
     use \Phron\Command\Command;
     
     private $scheduler;
-    
+
+
+    /**
+     * @param Scheduler $scheduler
+     */
     public function __construct(Scheduler $scheduler)
     {
         parent::__construct();
         
         $this->scheduler = $scheduler;
     }
-    
+
     protected function configure()
     {
         $this
@@ -29,13 +37,22 @@ class ShellCommand extends Command
     protected function fire()
     {
         $stack = $this->scheduler->getStack();
-        
+
+        $this->askQuestions($stack);
+    }
+
+
+    /**
+     * @param array $stack
+     */
+    protected function askQuestions(array $stack)
+    {
         foreach ($stack as $stackItem) {
-            
+
             $question  = $this->scheduler->getQuestion($stackItem);
-            
+
             $userInput = $this->ask($question);
-            
+
             if ((strtolower($userInput) == 'n' || strtolower($userInput) == 'no')
                 && $stackItem != 'command')
             {
@@ -46,16 +63,15 @@ class ShellCommand extends Command
             {
                 $userInput = '*';
             } elseif ($stackItem == 'command' && trim($userInput) == '') {
-                
+
                 do {
-                    
+
                     $userInput = $this->ask('Invalid input, please try again: ');
-                    
+
                 } while(trim($userInput) == '');
             }
-            
+
+            $this->scheduler->answerQuestion($stackItem, $userInput);
         }
-            
-        $this->scheduler->answerQuestion($stackItem, $userInput);
     }
 }
