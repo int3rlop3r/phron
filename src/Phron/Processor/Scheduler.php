@@ -12,15 +12,21 @@ class Scheduler
         'months',
         'weekdays',
         'command',
+        'logfile',
+        'errorfile',
+        'comment',
     );
 
     private $questions = array(
+        "Description: ",
         "Every Minute [y/n]: ", 
         "Every Hour [y/n]: ", 
         "Every Day [y/n]: ", 
         "Every Month [y/n]: ", 
         "Every Day of the week [y/n]: ", 
         "Command to execute: ", 
+        "File to log output to [null]: ", 
+        "File to log errors to [null]: ", 
     );
 
     private $subQuestions  = array(

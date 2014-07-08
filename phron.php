@@ -4,8 +4,9 @@
 require __DIR__.'/vendor/autoload.php';
 
 use Phron\Processor\Scheduler;
-use Symfony\Component\Console\Application;
 use Phron\Command\ShellCommand;
+use Symfony\Component\Console\Application;
+
 
 $scheculer    = new Scheduler;
 $shellCommand = new ShellCommand($scheculer);
