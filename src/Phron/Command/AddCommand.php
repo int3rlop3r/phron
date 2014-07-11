@@ -47,6 +47,11 @@ class AddCommand extends Command
     {
         $generator = $this->entries->getGenerator();
         
+        // set the name of the cron
+        $name = $this->ask('Name of the task: ');
+        
+        $generator->setName($name);
+        
         // generate the expression
         foreach ($this->questions as $item => $question) {
             $userInput = $this->ask($question);

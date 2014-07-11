@@ -7,11 +7,18 @@
  */
 require __DIR__.'/vendor/autoload.php';
 
+
+
+
+use Crontab\Job;
 use Symfony\Component\Console\Application;
 use Phron\Processor\Entries;
 use Phron\Command\AddCommand;
 use Phron\Processor\Generator;
-use Crontab\Job;
+
+
+
+
 /*--------------------
  | Spawn objects
  | -------------------
@@ -20,8 +27,8 @@ $job        = new Job;
 $generator  = new Generator($job);
 $entries    = new Entries($generator);
 $addCommand = new AddCommand($entries);
+$app        = new Application('Phron', '0.1');
 
-$app = new Application('Phron', '0.1');
 
 
 
@@ -30,6 +37,8 @@ $app = new Application('Phron', '0.1');
  | -------------------
  */
 $app->add($addCommand); // add the interactive shell
+
+
 
 
 /*--------------------

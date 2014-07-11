@@ -188,8 +188,12 @@ class Generator
      * @param string $comments Comment / description of the crontab
      * @return $this
      */
-    public function setName($name = 'no name')
+    public function setName($name)
     {
+        if (trim($name) == '') {
+            $name = 'no name';
+        }
+        
         $this->job->setComments($name);
         
         return $this;
