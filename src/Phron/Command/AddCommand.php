@@ -1,8 +1,6 @@
 <?php namespace Phron\Command;
 
-use Crontab\Job;
 use Phron\Processor\Entries;
-use Phron\Processor\Generator;
 use Symfony\Component\Console\Command\Command;
 
 /**
