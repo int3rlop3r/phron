@@ -5,17 +5,26 @@
  * @author Jonathan Fernandes <int3rlop3r@yahoo.in>
  */
 
-use Crontab\Job;
+use Phron\Processor\Generator;
 
 class Entries
 {
-    private $job;
+    private $generator;
 
-    public function __construct(Job $job)
+    public function __construct(Generator $generator)
     {
-        $this->job = $job;
+        $this->generator = $generator;
     }
-
+    
+    /**
+     * Returns the generator
+     * @return Generator Generator object
+     */
+    public function getGenerator()
+    {
+        return $this->generator;
+    }
+    
     public function add()
     {
         //

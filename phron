@@ -1,18 +1,39 @@
 #!/usr/bin/env php
 <?php
-// die(__DIR__.'/vendor/autoloader.php');
+
+/*--------------------
+ | Autoload files
+ | -------------------
+ */
 require __DIR__.'/vendor/autoload.php';
 
-use Phron\Processor\Scheduler;
 use Symfony\Component\Console\Application;
-use Phron\Command\ShellCommand;
-
-$scheculer    = new Scheduler;
-$shellCommand = new ShellCommand($scheculer);
-
+use Phron\Processor\Entries;
+use Phron\Command\AddCommand;
+use Phron\Processor\Generator;
+use Crontab\Job;
+/*--------------------
+ | Spawn objects
+ | -------------------
+ */
+$job        = new Job;
+$generator  = new Generator($job);
+$entries    = new Entries($generator);
+$addCommand = new AddCommand($entries);
 
 $app = new Application('Phron', '0.1');
-$app->add($shellCommand); // add the interactive shell
 
 
+
+/*--------------------
+ | Add them to the app
+ | -------------------
+ */
+$app->add($addCommand); // add the interactive shell
+
+
+/*--------------------
+ | Start the app
+ | -------------------
+ */
 $app->run();

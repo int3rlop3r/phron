@@ -5,17 +5,20 @@
  *
  * @author jonathan
  */
+
+use Crontab\Job;
+
 class Generator
 {
     /**
-     * @var array Field List '* * * * *'
+     * @var array Field List mapped to function names of the Job class
      */
     private $fields = array(
-        'minutes'    => '*',
-        'hour'       => '*',
-        'dayofmonth' => '*',
-        'month'      => '*',
-        'dayofweek'  => '*',
+        'minutes'    => 'Minute',
+        'hour'       => 'Hour',
+        'dayofmonth' => 'DayOfMonth',
+        'month'      => 'Month',
+        'dayofweek'  => 'DayOfWeek',
     );
     
     /**
@@ -37,6 +40,19 @@ class Generator
      * @var string Comment / description about the cron
      */
     private $comment;
+    
+    /**
+     * @var Job Job object
+     */
+    private $job;
+    
+    /**
+     * @param Job $job Job object
+     */
+    public function __construct(Job $job)
+    {
+        $this->job = $job;
+    }
     
     /**
      * Checks if the field name was valid
@@ -74,7 +90,9 @@ class Generator
     {
         $this->validField($item);
         
-        return $this->fields[$item];
+        $function = 'get' . $this->fields[$item]; // = $value;
+        
+        return $this->job->$function();
     }
     
     /**
@@ -88,7 +106,9 @@ class Generator
     {
         $this->validField($item);
         
-        $this->fields[$item] = $value;
+        $function = 'set' . $this->fields[$item]; // = $value;
+        
+        $this->job->$function($value);
         
         return $this;
     }
@@ -101,7 +121,7 @@ class Generator
      */
     public function setCommand($command)
     {
-        $this->command = $command;
+        $this->job->setCommand($command);
         
         return $this;
     }
@@ -113,7 +133,7 @@ class Generator
      */
     public function getCommand()
     {
-        return $this->command;
+        return $this->job->getCommand();
     }
     
     /**
@@ -124,7 +144,7 @@ class Generator
      */
     public function setLogFile($logFile)
     {
-        $this->logFile = $logFile;
+        $this->job->setLogFile($logFile);
         
         return $this;
     }
@@ -136,7 +156,7 @@ class Generator
      */
     public function getLogfile()
     {
-        return $this->logFile;
+        return $this->job->getLogFile();
     }
     
     /**
@@ -147,7 +167,7 @@ class Generator
      */
     public function setErrorFile($path)
     {
-        $this->errorFile = $path;
+        $this->job->setErrorFile($path);
         
         return $this;
     }
@@ -159,29 +179,39 @@ class Generator
      */
     public function getErrorFile()
     {
-        return $this->errorFile;
+        return $this->job->getErrorFile();
     }
     
     /**
-     * Sets the comment / description
+     * Sets the name for the cron
      * 
-     * @param string $comment Comment / description of the crontab
+     * @param string $comments Comment / description of the crontab
      * @return $this
      */
-    public function setComment($comment)
+    public function setName($name = 'no name')
     {
-        $this->comment = $comment;
+        $this->job->setComments($name);
         
         return $this;
     }
     
     /**
-     * Get the cron comment / description
+     * Gets the name of a cron
      * 
      * @return string crontab comment / description
      */
-    public function getComment()
+    public function getName()
     {
-        return $this->comment;
+        return $this->job->getComments();
+    }
+    
+    /**
+     * Returns the job instance
+     * 
+     * @return Job Job instance
+     */
+    public function getJob()
+    {
+        return $this->job;
     }
 }
