@@ -6,18 +6,18 @@
 
 use Phron\Processor\Entries;
 
-class CronTest extends PHPUnit_Framework_TestCase
+class EntriesTest extends PHPUnit_Framework_TestCase
 {
     private $entries;
     
-	public function setUp()
-	{
-		$this->entries = new Entries;
-	}
-    
-	public function testAddCronJob()
-	{
-		$this->entries->add();
-	}
+//    public function setUp()
+//    {
+//            $this->entries = new Entries;
+//    }
+//
+    public function testAddCronJob()
+    {
+//        $this->entries->add();
+    }
     
 }

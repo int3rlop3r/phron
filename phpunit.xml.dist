@@ -12,13 +12,13 @@
          bootstrap="vendor/autoload.php"
 >
     <testsuites>
-        <testsuite name="Yzalis Crontab Component Test Suite">
+        <testsuite name="Phron Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory>./src/Crontab/</directory>
+            <directory>./src/Phron/</directory>
         </whitelist>
     </filter>
 </phpunit>

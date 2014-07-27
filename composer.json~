@@ -16,7 +16,7 @@
     ],
     "require": {
         "mtdowling/cron-expression": "1.0.*",
-        "yzalis/Crontab": "dev-master",
+        "yzalis/Crontab": "master",
         "symfony/console": "2.6.*@dev"
     },
     "require-dev": {
