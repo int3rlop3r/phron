@@ -71,14 +71,12 @@ class AddCommand extends Command
                         $questionClass->getValidator()
                     );
             }
-            echo "\nUser Input\n";
             
             $generator->setFieldValue($item, $userInput);
         }
         
         // set command
-        $command = $this->askAndValidate('Enter Command: ', 
-                   function($answer) {
+        $command = $this->askAndValidate('Enter Command: ', function($answer) {
                         if (is_null($answer)) {
                             throw new \RuntimeException("Invalid value entered");
                         }
