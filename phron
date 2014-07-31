@@ -9,6 +9,7 @@ require __DIR__.'/vendor/autoload.php';
 
 
 use Crontab\Job;
+use Crontab\Crontab;
 use Symfony\Component\Console\Application;
 use Phron\Processor\Entries;
 use Phron\Command\AddCommand;
@@ -21,11 +22,13 @@ use Cron\FieldFactory;
  | -------------------
  */
 $job          = new Job;
+$crontab      = new Crontab;
 $generator    = new Generator($job);
-$entries      = new Entries($generator);
+$entries      = new Entries($crontab);
 $fieldFactory = new FieldFactory;
-$addCommand   = new AddCommand($entries, $fieldFactory);
-$app          = new Application('Phron', '0.1');
+$addCommand   = new AddCommand($entries, $generator, $fieldFactory);
+
+$app = new Application('Phron', '0.1');
 
 
 /*--------------------

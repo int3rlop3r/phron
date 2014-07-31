@@ -1,9 +1,10 @@
 <?php namespace Phron\Command;
 
+use Cron\FieldFactory;
+use Phron\Processor\Generator;
 use Phron\Processor\Entries;
 use Symfony\Component\Console\Command\Command;
 use Phron\Processor\Questions\QuestionFactory;
-use Cron\FieldFactory;
 use Phron\Processor\Questions\Questionable;
 
 /**
@@ -25,13 +26,21 @@ class AddCommand extends Command
     private $fieldFactory;
     
     /**
-     * @param Entries $entries
+     * @var Generator
      */
-    public function __construct(Entries $entries, FieldFactory $fieldFactory)
+    private $generator;
+    
+    /**
+     * @param Entries $entries
+     * @param Generator $generator
+     * @param FieldFactory $fieldFactory
+     */
+    public function __construct(Entries $entries, Generator $generator, FieldFactory $fieldFactory)
     {
         parent::__construct();
         
         $this->entries      = $entries;
+        $this->generator    = $generator;
         $this->fieldFactory = $fieldFactory;
     }
 
@@ -44,14 +53,12 @@ class AddCommand extends Command
 
     protected function fire()
     {
-        $generator = $this->entries->getGenerator();
-        
-        $itemList = $generator->getFieldList();
+        $itemList = $this->generator->getFieldList();
         
         // set the name of the cron
         $name = $this->ask('Name of the task: ');
         
-        $generator->setName($name);
+        $this->generator->setName($name);
         
         // generate the expression
         foreach ($itemList as $item => $className) {
@@ -72,11 +79,11 @@ class AddCommand extends Command
                     );
             }
             
-            $generator->setFieldValue($item, $userInput);
+            $this->generator->setFieldValue($item, $userInput);
         }
         
         // set command
-        $command = $this->askAndValidate('Enter Command: ', function($answer) {
+        $command =  $this->askAndValidate('Enter Command: ', function($answer) {
                         if (is_null($answer)) {
                             throw new \RuntimeException("Invalid value entered");
                         }
@@ -84,14 +91,14 @@ class AddCommand extends Command
                         return $answer;
                     });
         
-        $generator->setCommand($command);
+        $this->generator->setCommand($command);
         
         // set log file
         $logFile = $this->ask('File to log output: ');
         
         if (trim($logFile) != '') {
             
-            $generator->setLogFile($logFile);
+            $this->generator->setLogFile($logFile);
         }
         
         // set error log file
@@ -99,9 +106,15 @@ class AddCommand extends Command
         
         if (trim($errorLog)) {
             
-            $generator->setErrorFile($errorLog);
+            $this->generator->setErrorFile($errorLog);
         }
-        // render the cron
-        // var_dump($generator->getJob()->render());
+        
+        if ($this->entries->add($this->generator->getJob())) {
+            
+            $this->writeln("New cron added");
+        } else {
+            
+            $this->writeln("Failed to add cron");
+        }
     }
 }

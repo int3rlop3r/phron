@@ -43,6 +43,17 @@ trait Command {
     {
         return $this->input->getOption($key);
     }
+    
+    /**
+     * Display a message on the screen
+     * 
+     * @param string $message
+     * @return string
+     */
+    public function writeln($message)
+    {
+        return $this->output->writeln('<fg=black;bg=cyan>' . $message . '</fg=black;bg=cyan>');
+    }
 
     /**
      * Ask the user the given question.

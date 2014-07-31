@@ -5,29 +5,39 @@
  * @author Jonathan Fernandes <int3rlop3r@yahoo.in>
  */
 
-use Phron\Processor\Generator;
+use Crontab\Crontab;
+use Crontab\Job;
 
 class Entries
 {
-    private $generator;
-
-    public function __construct(Generator $generator)
+    /**
+     * @var Crontab
+     */
+    private $crontab;
+    
+    /**
+     * @param Generator $generator
+     * @param Crontab $crontab
+     */
+    public function __construct(Crontab $crontab)
     {
-        $this->generator = $generator;
+        $this->crontab   = $crontab;
     }
     
     /**
-     * Returns the generator
-     * @return Generator Generator object
+     * Adds a cron
+     * 
+     * @param Job $job
+     * @return $this false on failure
      */
-    public function getGenerator()
+    public function add(Job $job)
     {
-        return $this->generator;
+        if (is_null($job)) {
+            return false;
+        }
+        
+        $this->crontab->addJob($job)->write();
+        
+        return $this;
     }
-    
-    public function add()
-    {
-        //
-    }
-    
 }
