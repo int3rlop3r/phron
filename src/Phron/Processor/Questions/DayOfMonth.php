@@ -18,12 +18,13 @@ class DayOfMonth extends Questionable
      * @var list of presets
      */
     protected $presets = array(
-        '*',
-        '*/2',
-        '1-31/2',
-        '*/5',
-        '*/10',
-        '*/15',
+        '*', 
+        '*/2', 
+        '1-31/2', 
+        '*/5', 
+        '*/10', 
+        '*/15', 
+        null, 
     );
     
     /**
@@ -46,7 +47,7 @@ class DayOfMonth extends Questionable
      */
     public function getQuestion()
     {
-        return "Pick an option for day of the month (blank to enter custom value): ";
+        return "Pick an option for day of the month: ";
     }
     
     /**
@@ -64,7 +65,6 @@ class DayOfMonth extends Questionable
             "Every 10 Days", 
             "Every Half Month", 
             "Enter Custom Value", 
-            null, 
         );
     }
     
@@ -75,6 +75,6 @@ class DayOfMonth extends Questionable
      */
     public function getCustomValueQuestion()
     {
-        return "Enter custom value for day of the month [1-31]";
+        return "Enter custom value for day of the month [1-31]: ";
     }
 }

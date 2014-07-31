@@ -71,9 +71,9 @@ class AddCommand extends Command
                         $questionClass->getValidator()
                     );
             }
+            echo "\nUser Input\n";
             
             $generator->setFieldValue($item, $userInput);
-            die('test');
         }
         
         // set command
@@ -82,6 +82,8 @@ class AddCommand extends Command
                         if (is_null($answer)) {
                             throw new \RuntimeException("Invalid value entered");
                         }
+                        
+                        return $answer;
                     });
         
         $generator->setCommand($command);

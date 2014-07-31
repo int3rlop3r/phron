@@ -18,9 +18,10 @@ class DayOfWeek extends Questionable
      * @var list of presets
      */
     protected $presets = array(
-        '*',
-        '1-5',
-        '0,6',
+        '*', 
+        '1-5', 
+        '0,6', 
+        null, 
     );
     
     /**
@@ -43,7 +44,7 @@ class DayOfWeek extends Questionable
      */
     public function getQuestion()
     {
-        return "Pick an option for day of the week (blank to enter custom value): ";
+        return "Pick an option for day of the week: ";
     }
     
     /**
@@ -58,7 +59,6 @@ class DayOfWeek extends Questionable
             "Monday-Friday", 
             "Weekend Days", 
             "Enter Custom Value", 
-            null, 
         );
     }
     
@@ -69,6 +69,6 @@ class DayOfWeek extends Questionable
      */
     public function getCustomValueQuestion()
     {
-        return "Enter custom value for day of the week [0-7]";
+        return "Enter custom value for day of the week [0-7]: ";
     }
 }

@@ -47,7 +47,7 @@ class Minute extends Questionable
      */
     public function getQuestion()
     {
-        return "Pick an option for minute (blank to enter custom value): ";
+        return "Pick an option for minute: ";
     }
     
     /**
@@ -75,6 +75,6 @@ class Minute extends Questionable
      */
     public function getCustomValueQuestion()
     {
-        return "Enter custom value for minutes [0-59]";
+        return "Enter custom value for minutes [0-59]: ";
     }
 }

@@ -18,11 +18,12 @@ class Month extends Questionable
      * @var list of presets
      */
     protected $presets = array(
-        '*',
-        '*/2',
-        '1-11/2',
-        '*/4',
-        '*/6',
+        '*', 
+        '*/2', 
+        '1-11/2', 
+        '*/4', 
+        '*/6', 
+        null, 
     );
     
     /**
@@ -45,7 +46,7 @@ class Month extends Questionable
      */
     public function getQuestion()
     {
-        return "Pick an option for month (blank to enter custom value): ";
+        return "Pick an option for month: ";
     }
     
     /**
@@ -62,7 +63,6 @@ class Month extends Questionable
             "Every 4 Months", 
             "Every Half Year", 
             "Enter Custom Value", 
-            null, 
         );
     }
     
@@ -73,6 +73,6 @@ class Month extends Questionable
      */
     public function getCustomValueQuestion()
     {
-        return "Enter custom value for month [1-12]";
+        return "Enter custom value for month [1-12]: ";
     }
 }
