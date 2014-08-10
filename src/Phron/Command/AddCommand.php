@@ -1,57 +1,32 @@
 <?php namespace Phron\Command;
 
+/**
+ * Description of ShowCommand
+ *
+ * @author jonathan
+ */
+
 use Cron\FieldFactory;
 use Phron\Processor\Generator;
 use Phron\Processor\Entries;
-use Symfony\Component\Console\Command\Command;
 use Phron\Processor\Questions\QuestionFactory;
 use Phron\Processor\Questions\Questionable;
 
-/**
- * Class AddCommand
- * @package Phron\Command
- */
-class AddCommand extends Command
+class AddCommand extends AbstractCommand
 {
-    use \Phron\Command\Command;
-    
-    /**
-     * @var Entries
-     */
-    private $entries;
-    
-    /**
-     * @var FieldFactory
-     */
-    private $fieldFactory;
-    
-    /**
-     * @var Generator
-     */
-    private $generator;
-    
-    /**
-     * @param Entries $entries
-     * @param Generator $generator
-     * @param FieldFactory $fieldFactory
-     */
     public function __construct(Entries $entries, Generator $generator, FieldFactory $fieldFactory)
     {
-        parent::__construct();
-        
-        $this->entries      = $entries;
-        $this->generator    = $generator;
-        $this->fieldFactory = $fieldFactory;
+        parent::__construct($entries, $generator, $fieldFactory);
     }
-
-    protected function configure()
+    
+    public function configure()
     {
         $this->setName('add')
              ->setDescription('Create a new task')
-             ->setHelp('Creates a new task');
+             ->setHelp('Create a new task');
     }
 
-    protected function fire()
+    public function fire()
     {
         $itemList = $this->generator->getFieldList();
         

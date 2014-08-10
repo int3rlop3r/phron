@@ -1,20 +1,14 @@
 #!/usr/bin/env php
-<?php
-
-/*--------------------
- | Autoload files
- | -------------------
- */
-require __DIR__.'/vendor/autoload.php';
-
+<?php require __DIR__.'/vendor/autoload.php';
 
 use Crontab\Job;
 use Crontab\Crontab;
-use Symfony\Component\Console\Application;
-use Phron\Processor\Entries;
-use Phron\Command\AddCommand;
-use Phron\Processor\Generator;
 use Cron\FieldFactory;
+use Phron\Processor\Entries;
+use Phron\Processor\Generator;
+use Symfony\Component\Console\Application;
+use Phron\Command\AddCommand;
+use Phron\Command\ShowCommand;
 
 
 /*--------------------
@@ -27,6 +21,7 @@ $generator    = new Generator($job);
 $entries      = new Entries($crontab);
 $fieldFactory = new FieldFactory;
 $addCommand   = new AddCommand($entries, $generator, $fieldFactory);
+$showCommand  = new ShowCommand($entries, $generator, $fieldFactory);
 
 $app = new Application('Phron', '0.1');
 
@@ -35,7 +30,8 @@ $app = new Application('Phron', '0.1');
  | Add them to the app
  | -------------------
  */
-$app->add($addCommand); // add the interactive shell
+$app->add($addCommand);
+$app->add($showCommand);
 
 
 /*--------------------

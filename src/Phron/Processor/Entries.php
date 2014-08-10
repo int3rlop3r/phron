@@ -40,4 +40,25 @@ class Entries
         
         return $this;
     }
+    
+    /**
+     * Search for a job from a list of tasks
+     * 
+     * @param int $id
+     * @return Job returns a job from the list
+     */
+    public function find($id)
+    {
+        //
+    }
+    
+    /**
+     * Returns a list of tasks
+     * 
+     * @return Crontab
+     */
+    public function all()
+    {
+        return $this->crontab->getJobs();
+    }
 }
