@@ -10,14 +10,12 @@ class EntriesTest extends PHPUnit_Framework_TestCase
 {
     private $entries;
     
-//    public function setUp()
-//    {
-//            $this->entries = new Entries;
-//    }
-//
-    public function testAddCronJob()
+    public function setUp()
     {
-//        $this->entries->add();
+//            $this->entries = new Entries;
+            $this->entries = null;
     }
     
+    public function testAddCronJob()
+    {}
 }

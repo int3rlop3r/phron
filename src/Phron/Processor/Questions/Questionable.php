@@ -17,11 +17,48 @@ abstract class Questionable
     protected $fieldFactory;
     
     /**
+     * @var int position of the field
+     */
+    protected $position;
+
+
+    /**
      * @param FieldFactory $fieldFactory
      */
-    public function __construct(FieldFactory $fieldFactory)
+    public function __construct(FieldFactory $fieldFactory, $position)
     {
         $this->fieldFactory = $fieldFactory;
+        $this->position     = $position;
+    }
+    
+    
+    /**
+     * Gets the value of a field based on the selection of the user
+     * 
+     * @param int $selection
+     * @return string
+     */
+    public function getBySelection($selection)
+    {
+        return isset($this->presets[$selection]) ? $this->presets[$selection]: null;
+    }
+    
+    /**
+     * @return FieldFactory
+     */
+    public function getFieldFactory()
+    {
+        return $this->fieldFactory;
+    }
+    
+    /**
+     * Gets the position of the field
+     * 
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
     }
     
     /**
@@ -49,25 +86,6 @@ abstract class Questionable
     }
     
     /**
-     * Gets the value of a field based on the selection of the user
-     * 
-     * @param int $selection
-     * @return string
-     */
-    public function getBySelection($selection)
-    {
-        return isset($this->presets[$selection]) ? $this->presets[$selection]: null;
-    }
-    
-    /**
-     * @return FieldFactory
-     */
-    public function getFieldFactory()
-    {
-        return $this->fieldFactory;
-    }
-    
-    /**
      * Fetches the question
      * 
      * @return string Question
@@ -80,13 +98,6 @@ abstract class Questionable
      * @return array list of options
      */
     abstract public function getOptions();
-    
-    /**
-     * Gets the position of the field
-     * 
-     * @return int
-     */
-    abstract public function getPosition();
     
     /**
      * Gets question that prompts the user to enter a custom value for a field

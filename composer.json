@@ -8,12 +8,6 @@
             "email": "int3rlop3r@yahoo.in"
         }
     ],
-    "repositories": [
-        {
-            "url": "https://github.com/int3rlop3r/Crontab.git",
-            "type": "git"
-        }
-    ],
     "require": {
         "mtdowling/cron-expression": "1.0.*",
         "yzalis/Crontab": "dev-master",

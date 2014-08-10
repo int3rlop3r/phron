@@ -29,12 +29,7 @@ class DayOfWeek extends Questionable
      */
     public function __construct(FieldFactory $fieldFactory)
     {
-        parent::__construct($fieldFactory);
-    }
-    
-    public function getPosition()
-    {
-        return self::POSITION;
+        parent::__construct($fieldFactory, self::POSITION);
     }
     
     /**

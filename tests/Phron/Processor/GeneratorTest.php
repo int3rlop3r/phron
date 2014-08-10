@@ -11,6 +11,7 @@ use Crontab\Job;
 class GeneratorTest extends PHPUnit_Framework_TestCase
 {
     private $generator;
+    
     private $job;
     
     public function setUp()
@@ -64,4 +65,5 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
         // Test Job
         $this->assertInstanceOf('Crontab\Job', $this->generator->getJob());
     }
+    
 }
