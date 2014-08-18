@@ -9,8 +9,6 @@
 use Cron\FieldFactory;
 use Phron\Processor\Generator;
 use Phron\Processor\Entries;
-use Phron\Processor\Questions\QuestionFactory;
-use Phron\Processor\Questions\Questionable;
 use Symfony\Component\Console\Input\InputOption;
 
 class ShowCommand extends AbstractCommand
@@ -36,7 +34,17 @@ class ShowCommand extends AbstractCommand
     
     public function fire()
     {
-        $jobs = $this->entries->all();
+        $limit = $this->input->getOption('limit');
+        
+        if (strpos($limit, '-') !== false) {
+            list($start, $length) = explode('-', $limit);
+            $start--; // coz people are used to 1 being the first number! :p
+        } else {
+            $start = 0;
+            $length = intval($limit);
+        }
+        
+        $jobs = $this->entries->get($start, $length);
         
         var_dump($jobs);
     }

@@ -5,8 +5,9 @@
  * @author Jonathan Fernandes <int3rlop3r@yahoo.in>
  */
 
-use Crontab\Crontab;
 use Crontab\Job;
+use Crontab\Crontab;
+use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 class Entries
 {
@@ -57,8 +58,14 @@ class Entries
      * 
      * @return Crontab
      */
-    public function all()
+    public function get($start, $length)
     {
-        return $this->crontab->getJobs();
+        $jobs = $this->crontab->getJobs();
+        
+        if ($start > $length) {
+            throw new InvalidArgumentException('"start" value cannot be greater than "length"');
+        }
+        
+        return array_slice($jobs, $start, $length);
     }
 }
