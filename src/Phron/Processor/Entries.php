@@ -1,6 +1,5 @@
 <?php namespace Phron\Processor;
 
-
 /**
  * @author Jonathan Fernandes <int3rlop3r@yahoo.in>
  */
@@ -22,7 +21,7 @@ class Entries
      */
     public function __construct(Crontab $crontab)
     {
-        $this->crontab   = $crontab;
+        $this->crontab = $crontab;
     }
     
     /**
@@ -43,6 +42,16 @@ class Entries
     }
     
     /**
+     * Fetches all the tasks
+     * 
+     * @return array list of tasks
+     */
+    public function all()
+    {
+        return $this->crontab->getJobs();
+    }
+    
+    /**
      * Search for a job from a list of tasks
      * 
      * @param int $id
@@ -50,22 +59,90 @@ class Entries
      */
     public function find($id)
     {
-        //
+        $id++;
+        
+        $jobs = $this->all();
+        
+        return isset($jobs[$id]) ? $jobs[$id]: null;
+    }
+    
+    /**
+     * Get tasks by ids
+     * 
+     * @param array $ids
+     * @return array list of tasks
+     */
+    public function inIds(array $ids)
+    {
+        $jobs = $this->all();
+        
+        $result = array();
+        
+        foreach ($ids as $id) {
+            $tmpJob = isset($jobs[$id]) ? $jobs[$id]: null;
+            
+            if (is_null($tmpJob)) { continue; }
+            
+            $result[] = $tmpJob;
+        }
+        
+        return $result;
     }
     
     /**
      * Returns a list of tasks
      * 
-     * @return Crontab
+     * @param int $start
+     * @param int $length
+     * @return array list of tasks
      */
-    public function get($start, $length)
+    public function getByRange($start, $length = null)
     {
-        $jobs = $this->crontab->getJobs();
+        $jobs = $this->all();
         
         if ($start > $length) {
             throw new InvalidArgumentException('"start" value cannot be greater than "length"');
         }
         
         return array_slice($jobs, $start, $length);
+    }
+    
+    /**
+     * Update job by id
+     * 
+     * @param int $id
+     * @param Job $job
+     * @return Crontab
+     */
+    public function update($id, Job $job)
+    {
+        // do something about this
+    }
+    
+    /**
+     * Delete tasks by ids
+     * 
+     * @param array $ids ids of tasks to be deleted
+     * @return $this
+     */
+    public function deleteByIds(array $ids)
+    {
+        $jobs = $this->inIds($ids);
+        
+        foreach ($jobs as $job) {
+            $this->crontab->removeJob($job);
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Deletes all cron jobs
+     * 
+     * @return Crontab
+     */
+    public function clear()
+    {
+        return $this->crontab->removeAllJobs();
     }
 }

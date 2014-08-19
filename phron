@@ -9,19 +9,21 @@ use Phron\Processor\Generator;
 use Symfony\Component\Console\Application;
 use Phron\Command\AddCommand;
 use Phron\Command\ShowCommand;
+use Phron\Command\DeleteCommand;
 
 
 /*--------------------
  | Spawn objects
  | -------------------
  */
-$job          = new Job;
-$crontab      = new Crontab;
-$generator    = new Generator($job);
-$entries      = new Entries($crontab);
-$fieldFactory = new FieldFactory;
-$addCommand   = new AddCommand($entries, $generator, $fieldFactory);
-$showCommand  = new ShowCommand($entries, $generator, $fieldFactory);
+$job           = new Job;
+$crontab       = new Crontab;
+$generator     = new Generator($job);
+$entries       = new Entries($crontab);
+$fieldFactory  = new FieldFactory;
+$addCommand    = new AddCommand($entries, $generator, $fieldFactory);
+$showCommand   = new ShowCommand($entries, $generator, $fieldFactory);
+$deleteCommand = new DeleteCommand($entries, $generator, $fieldFactory);
 
 $app = new Application('Phron', '0.1');
 
@@ -32,6 +34,7 @@ $app = new Application('Phron', '0.1');
  */
 $app->add($addCommand);
 $app->add($showCommand);
+$app->add($deleteCommand);
 
 
 /*--------------------

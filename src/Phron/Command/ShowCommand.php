@@ -10,9 +10,15 @@ use Cron\FieldFactory;
 use Phron\Processor\Generator;
 use Phron\Processor\Entries;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 class ShowCommand extends AbstractCommand
 {
+    /**
+     * @param Entries $entries
+     * @param Generator $generator
+     * @param FieldFactory $fieldFactory
+     */
     public function __construct(Entries $entries, Generator $generator, FieldFactory $fieldFactory)
     {
         parent::__construct($entries, $generator, $fieldFactory);
@@ -26,9 +32,9 @@ class ShowCommand extends AbstractCommand
              ->addOption(
                 'limit', 
                 '-l', 
-                InputOption::VALUE_REQUIRED, 
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 
                 'Set limit of tasks to display', 
-                0
+                null
             );
     }
     
@@ -36,15 +42,21 @@ class ShowCommand extends AbstractCommand
     {
         $limit = $this->input->getOption('limit');
         
-        if (strpos($limit, '-') !== false) {
-            list($start, $length) = explode('-', $limit);
-            $start--; // coz people are used to 1 being the first number! :p
-        } else {
-            $start = 0;
-            $length = intval($limit);
+        if (count($limit) > 2) {
+            throw new InvalidArgumentException("Limit accepts 2 arguments");
         }
         
-        $jobs = $this->entries->get($start, $length);
+        if (!empty($limit)) {
+            $start  = isset($limit[0]) ? intval($limit[0]) : 0; # code smell
+            $length = isset($limit[1]) ? intval($limit[1]) : null;
+            
+            $start--; // coz people being with 1  as the first number! :p
+            
+            $jobs = $this->entries->getByRange($start, $length);
+        } else {
+            // get all
+            $jobs = $this->entries->all();
+        }
         
         var_dump($jobs);
     }
