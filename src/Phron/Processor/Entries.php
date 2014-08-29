@@ -32,7 +32,8 @@ class Entries
      */
     public function add(Job $job)
     {
-        if (is_null($job)) {
+        if (is_null($job))
+        {
             return false;
         }
         
@@ -59,7 +60,7 @@ class Entries
      */
     public function find($id)
     {
-        $id++;
+//        $id++;
         
         $jobs = $this->all();
         
@@ -78,7 +79,8 @@ class Entries
         
         $result = array();
         
-        foreach ($ids as $id) {
+        foreach ($ids as $id)
+        {
             $tmpJob = isset($jobs[$id]) ? $jobs[$id]: null;
             
             if (is_null($tmpJob)) { continue; }
@@ -100,10 +102,14 @@ class Entries
     {
         $jobs = $this->all();
         
-        if ($start > $length) {
+        $total = count($jobs);
+        
+        if ($start > $total || ($start + $length) > $total)
+        {
             throw new InvalidArgumentException('"start" value cannot be greater than "length"');
         }
         
+        //die("Start: $start, Length: $length");
         return array_slice($jobs, $start, $length);
     }
     
@@ -127,10 +133,12 @@ class Entries
      */
     public function deleteByIds(array $ids)
     {
-        $jobs = $this->inIds($ids);
-        
-        foreach ($jobs as $job) {
-            $this->crontab->removeJob($job);
+        foreach ($ids as $id)
+        {
+            $job = $this->find($id);
+            var_dump($job);
+//            die(PHP_EOL);
+//            $this->crontab->removeJob($job);
         }
         
         return $this;

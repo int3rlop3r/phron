@@ -9,24 +9,25 @@ use Cron\FieldFactory;
  */
 class DayOfMonth extends Questionable
 {
+
     /**
      * @var int position of the field
      */
     const POSITION = 2;
-    
+
     /**
      * @var list of presets
      */
     protected $presets = array(
-        '*', 
-        '*/2', 
-        '1-31/2', 
-        '*/5', 
-        '*/10', 
-        '*/15', 
-        null, 
+        '*',
+        '*/2',
+        '1-31/2',
+        '*/5',
+        '*/10',
+        '*/15',
+        null,
     );
-    
+
     /**
      * @param FieldFactory $fieldFactory
      */
@@ -34,7 +35,7 @@ class DayOfMonth extends Questionable
     {
         parent::__construct($fieldFactory, self::POSITION);
     }
-    
+
     /**
      * Fetches available options
      * 
@@ -44,7 +45,7 @@ class DayOfMonth extends Questionable
     {
         return "Pick an option for day of the month: ";
     }
-    
+
     /**
      * Fetches the question
      * 
@@ -53,16 +54,16 @@ class DayOfMonth extends Questionable
     public function getOptions()
     {
         return array(
-            "Every Day", 
-            "Even Days", 
-            "Odd Days", 
-            "Every 5 Days", 
-            "Every 10 Days", 
-            "Every Half Month", 
-            "Enter Custom Value", 
+            "Every Day",
+            "Even Days",
+            "Odd Days",
+            "Every 5 Days",
+            "Every 10 Days",
+            "Every Half Month",
+            "Enter Custom Value",
         );
     }
-    
+
     /**
      * Gets question that prompts the user to enter a custom value for a field
      * 
@@ -72,4 +73,5 @@ class DayOfMonth extends Questionable
     {
         return "Enter custom value for day of the month [1-31]: ";
     }
+
 }

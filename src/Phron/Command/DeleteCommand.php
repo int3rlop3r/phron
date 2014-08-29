@@ -25,40 +25,52 @@ class DeleteCommand extends AbstractCommand
     
     public function configure()
     {
+        $description = 'task id(s) to delete [eg: 1 2 3 will delete tasks '
+                     . '1, 2 & 3. 1-5 will delete tasks 1, 2, 3, 4, 5]';
+        
         $this->setName('delete')
              ->setDescription('Delete tasks')
              ->setHelp('Delete tasks')
              ->addArgument(
-                 'taskIndexString', 
-                 InputArgument::IS_ARRAY,               // make this optional and add a delete all option 
-                 'task id(s) to delete ("," separated)'
+                'taskIds', 
+                InputArgument::IS_ARRAY,               // make this optional and add a delete all option 
+                $description
             );
     }
     
     public function fire()
     {
-        $taskIds = $this->input->getArgument('taskIndexString');
-        
         $tasksToDelete = array();
         
-        foreach ($taskIds as $taskIdString) {
-            
-            if (strpos($taskIdString, '-') !== false) {
-                $idParts = explode('-', $taskIdString);
-                
-                if (count($idParts) != 2) { continue; }
-                
-                $idRange = range(intval($idParts[0]), intval($idParts[1]));
-                
-                $tasksToDelete = array_merge($tasksToDelete, $idRange);
-            } else {
-                
-                $tasksToDelete[] = intval($taskIdString);
+        $taskIds = $this->input->getArgument('taskIds');
+        
+        if (empty($taskIds))
+        {
+            // delete all tasks
+            die("Deleting all tasks.\n");
+        }
+        else
+        {
+            foreach ($taskIds as $taskIdString)
+            {
+                if (strpos($taskIdString, '-') !== false)
+                {
+                    $idParts = explode('-', $taskIdString);
+
+                    if (count($idParts) != 2) { continue; }
+
+                    $idRange = range(intval($idParts[0]), intval($idParts[1]));
+
+                    $tasksToDelete = array_merge($tasksToDelete, $idRange);
+                }
+                else
+                {
+                    $tasksToDelete[] = intval($taskIdString);
+                }
             }
         }
         
-        $ids = array_unique($tasksToDelete);
-        
-        var_dump($ids);
+        //var_dump($tasksToDelete);
+        $this->entries->deleteByIds($tasksToDelete);
     }
 }

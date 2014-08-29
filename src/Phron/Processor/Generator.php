@@ -1,15 +1,17 @@
-<?php namespace Phron\Processor;
+<?php
+
+namespace Phron\Processor;
 
 /**
  * Generates and manipulates a cron tab
  *
  * @author jonathan
  */
-
 use Crontab\Job;
 
 class Generator
 {
+
     /**
      * @var array Field List mapped to function names of the Job class
      */
@@ -20,32 +22,32 @@ class Generator
         'month'      => 'Month',
         'dayofweek'  => 'DayOfWeek',
     );
-    
+
     /**
      * @var string Command to be executed
      */
     private $command;
-    
+
     /**
      * @var string Path of the log file
      */
     private $logFile;
-    
+
     /**
      * @var string Path of the error log file
      */
     private $errorFile;
-    
+
     /**
      * @var string Comment / description about the cron
      */
     private $comment;
-    
+
     /**
      * @var Job Job object
      */
     private $job;
-    
+
     /**
      * @param Job $job Job object
      */
@@ -53,7 +55,7 @@ class Generator
     {
         $this->job = $job;
     }
-    
+
     /**
      * Checks if the field name was valid
      * 
@@ -63,13 +65,14 @@ class Generator
      */
     private function validField($item)
     {
-        if (!isset($this->fields[$item])) {
+        if (!isset($this->fields[$item]))
+        {
             throw new \Exception("Invalid field: $item.");
         }
-        
+
         return true;
     }
-    
+
     /**
      * Returns the field list
      * 
@@ -79,7 +82,7 @@ class Generator
     {
         return $this->fields;
     }
-    
+
     /**
      * Gets the value of a field
      * 
@@ -89,12 +92,12 @@ class Generator
     public function getFieldValue($item)
     {
         $this->validField($item);
-        
+
         $function = 'get' . $this->fields[$item]; // = $value;
-        
+
         return $this->job->$function();
     }
-    
+
     /**
      * Set the value of a field
      * 
@@ -105,14 +108,14 @@ class Generator
     public function setFieldValue($item, $value)
     {
         $this->validField($item);
-        
+
         $function = 'set' . $this->fields[$item]; // = $value;
-        
+
         $this->job->$function($value);
-        
+
         return $this;
     }
-    
+
     /**
      * Sets the command to be run
      * 
@@ -122,10 +125,10 @@ class Generator
     public function setCommand($command)
     {
         $this->job->setCommand($command);
-        
+
         return $this;
     }
-    
+
     /**
      * Get the command to be run
      * 
@@ -135,7 +138,7 @@ class Generator
     {
         return $this->job->getCommand();
     }
-    
+
     /**
      * Sets the log file path
      * 
@@ -145,10 +148,10 @@ class Generator
     public function setLogFile($logFile)
     {
         $this->job->setLogFile($logFile);
-        
+
         return $this;
     }
-    
+
     /**
      * Gets the log file path
      * 
@@ -158,7 +161,7 @@ class Generator
     {
         return $this->job->getLogFile();
     }
-    
+
     /**
      * Sets the error log file path
      * 
@@ -168,10 +171,10 @@ class Generator
     public function setErrorFile($path)
     {
         $this->job->setErrorFile($path);
-        
+
         return $this;
     }
-    
+
     /**
      * Gets the error log file path
      * 
@@ -181,7 +184,7 @@ class Generator
     {
         return $this->job->getErrorFile();
     }
-    
+
     /**
      * Sets the name for the cron
      * 
@@ -190,15 +193,16 @@ class Generator
      */
     public function setName($name)
     {
-        if (trim($name) == '') {
+        if (trim($name) == '')
+        {
             $name = 'no name';
         }
-        
+
         $this->job->setComments($name);
-        
+
         return $this;
     }
-    
+
     /**
      * Gets the name of a cron
      * 
@@ -208,7 +212,7 @@ class Generator
     {
         return $this->job->getComments();
     }
-    
+
     /**
      * Returns the job instance
      * 
@@ -218,4 +222,5 @@ class Generator
     {
         return $this->job;
     }
+
 }
