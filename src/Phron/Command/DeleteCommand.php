@@ -44,12 +44,7 @@ class DeleteCommand extends AbstractCommand
         
         $taskIds = $this->input->getArgument('taskIds');
         
-        if (empty($taskIds))
-        {
-            // delete all tasks
-            die("Deleting all tasks.\n");
-        }
-        else
+        if (!empty($taskIds))
         {
             foreach ($taskIds as $taskIdString)
             {
@@ -68,9 +63,32 @@ class DeleteCommand extends AbstractCommand
                     $tasksToDelete[] = intval($taskIdString);
                 }
             }
+            
+            $confirmation = $this->ask('Delete ' . count($tasksToDelete) . ' task(s)? ');
+            
+            if (strtolower($confirmation) == 'yes' || strtolower($confirmation) == 'y')
+            {
+                $this->entries->deleteByIds($tasksToDelete);
+            }
+            else
+            {
+                $this->writeln('Cancelled');
+            }
+        }
+        else
+        {
+            $confirmation = $this->ask('Delete all tasks? ');
+            
+            if (strtolower($confirmation) == 'yes' || strtolower($confirmation) == 'y')
+            {
+                $this->entries->clear();
+            }
+            else
+            {
+                $this->writeln('Cancelled');
+            }
         }
         
-        //var_dump($tasksToDelete);
-        $this->entries->deleteByIds($tasksToDelete);
+        $this->writeln('Done');
     }
 }

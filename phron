@@ -3,6 +3,7 @@
 
 use Crontab\Job;
 use Crontab\Crontab;
+use Crontab\CrontabFileHandler;
 use Cron\FieldFactory;
 use Phron\Processor\Entries;
 use Phron\Processor\Generator;
@@ -16,14 +17,15 @@ use Phron\Command\DeleteCommand;
  | Spawn objects
  | -------------------
  */
-$job           = new Job;
-$crontab       = new Crontab;
-$generator     = new Generator($job);
-$entries       = new Entries($crontab);
-$fieldFactory  = new FieldFactory;
-$addCommand    = new AddCommand($entries, $generator, $fieldFactory);
-$showCommand   = new ShowCommand($entries, $generator, $fieldFactory);
-$deleteCommand = new DeleteCommand($entries, $generator, $fieldFactory);
+$job                = new Job;
+$crontab            = new Crontab;
+$crontabFileHandler = new CrontabFileHandler;
+$generator          = new Generator($job);
+$entries            = new Entries($crontab);
+$fieldFactory       = new FieldFactory;
+$addCommand         = new AddCommand($entries, $generator, $fieldFactory);
+$showCommand        = new ShowCommand($entries, $generator, $fieldFactory);
+$deleteCommand      = new DeleteCommand($entries, $generator, $fieldFactory);
 
 $app = new Application('Phron', '0.1');
 
