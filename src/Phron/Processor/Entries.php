@@ -20,19 +20,52 @@ class Entries
      * @var CrontabFileHandler
      */
     private $cronFileHandler;
+
+    /**
+     * @var crontab file
+     */
+    private $crontabFile;
     
     /**
-     * @param Generator $generator
      * @param Crontab $crontab
      * @param CrontabFileHandler $cronFileHandler
      */
-    public function __construct(Crontab $crontab, CrontabFileHandler $cronFileHandler)
+    public function __construct(
+        Crontab $crontab, 
+        CrontabFileHandler $cronFileHandler,
+        $crontabFile = null)
     {
-        $this->crontab = $crontab;
-        
+        $this->crontab         = $crontab; 
         $this->cronFileHandler = $cronFileHandler;
+
+        if (!is_null($crontabFile))
+        {
+            $this->setCrontabFile($crontabFile);
+        }
     }
-    
+
+    /**
+     * Sets the crontab file
+     *
+     * @param string path to file
+     * @return $this
+     */
+    public function setCrontabFile($file)
+    {
+        $this->crontabFile = $file;
+
+        return $this;
+    }
+
+    /**
+     * Gets the crontab file
+     * @return $this
+     */
+    public function getCrontabFile()
+    {
+        return $this->crontabFile;
+    }
+
     /**
      * Adds a cron
      * 
@@ -49,7 +82,7 @@ class Entries
         $this->crontab->addJob($job); //->write();
         
         // save the job
-        $this->persist($file);
+        $this->save($file);
         
         return $this;
     }
@@ -59,7 +92,7 @@ class Entries
      * 
      * @param string $file /path/to/file/
      */
-    public function persist($file = null)
+    public function save($file = null)
     {
         if (is_null($file))
         {
@@ -136,7 +169,7 @@ class Entries
             }
         }
         
-        $this->persist();
+        $this->save();
         
         return $this;
     }

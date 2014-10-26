@@ -12,71 +12,52 @@ use Crontab\CrontabFileHandler;
 
 class EntriesTest extends PHPUnit_Framework_TestCase
 {
-    private $job;
-    
-    private $crontab;
-    
-    private $cronFileHandler;
-    
+    private $crontabFile;
+
+    private $crontabData;
+
     private $entries;
-    
-    private $generator;
-    
-    private $tmpFile = '/tmp/cron_file';
-    
-    private $logFile = '/tmp/cron__log_file';
-    
-    private $errorLogFile = '/tmp/cron_error_log_file';
-    
+
+    private $crontab;
+
+    private $crontabFileHandler;
+
     public function setUp()
     {
-        touch($this->tmpFile);
-        
-        $this->job             = new Job;
-        $this->crontab         = new Crontab;
-        $this->cronFileHandler = new CrontabFileHandler;
-        $this->generator       = new Generator($job);
-        $this->entries         = new Entries($crontab, $cronFileHandler);
+        $pathToFixture = __DIR__.'/../../fixture';
+
+        $this->crontabFile     = $pathToFixture . '/crontabFile';
+        $this->crontabDataFile = $pathToFixture . '/crontabDataFile';
+
+        $this->resetFile();
+
+        $this->crontabFileHandler = new CrontabFileHandler;
+
+        $this->crontab = new Crontab;
+        $this->entries = new Entries($this->crontab, $this->crontabFileHandler);
+    }
+
+    public function resetFile()
+    {
+        file_put_contents($this->crontabFile, '');
     }
     
     public function tearDown()
     {
-//        unlink($this->tmpFile);
+        $this->resetFile();
     }
-    
-    public function createJob($count)
+
+    public function testFileGetterAndSetter()
     {
-        $fields = $this->generator->getFieldList();
-        
-        // set values for fields
-        foreach ($fields as $field)
-        {
-            $this->generator->setFieldValue($field, $count);
-        }
-        
-        $this->generator
-            ->setName('Test Task')
-            ->setLogFile($this->logFile)
-            ->setErrorFile($this->errorLogFile);
-        
-        $this->entries->add($this->generator->getJob(), $this->tmpFile);
+        $filename = $this->entries
+                        ->setCrontabFile($this->crontabFile)
+                        ->getCrontabFile();
+
+        $this->assertEquals($this->crontabFile, $filename);
     }
-    
-    public function testAddCronJob()
+
+    public function testLoadFromFile()
     {
-        // create job 1
-        $this->createJob(1);
-        
-        // create job 2
-        $this->createJob(2);
-        
-        // create job 3
-        $this->createJob(3);
-        
-        // create job 4
-        $this->createJob(4);
-        
-        // create job 5
-        $this->createJob(5);
+        //
     }
 }
