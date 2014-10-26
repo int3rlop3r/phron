@@ -49,6 +49,8 @@ class EntriesTest extends PHPUnit_Framework_TestCase
 
     public function testFileGetterAndSetter()
     {
+        $this->assertNull($this->entries->getCrontabFile());
+
         $filename = $this->entries
                         ->setCrontabFile($this->crontabFile)
                         ->getCrontabFile();
@@ -58,6 +60,8 @@ class EntriesTest extends PHPUnit_Framework_TestCase
 
     public function testLoadFromFile()
     {
-        //
+        $this->entries->loadFromFile($this->crontabDataFile);
+
+        $this->assertEquals(4, count($this->entries->all()));
     }
 }

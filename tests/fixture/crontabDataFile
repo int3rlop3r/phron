@@ -1,0 +1,4 @@
+0 * * * * cmd1 > /tmp/test1.log 2>> /tmp/test1.err.log
+0 * * * * cmd2 > /tmp/test2.log 2>> /tmp/test2.err.log
+0 * * * * cmd3 > /tmp/test3.log 2>> /tmp/test3.err.log
+0 * * * * cmd4 > /tmp/test4.log 2>> /tmp/test4.err.log

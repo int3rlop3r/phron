@@ -19,7 +19,7 @@ class Entries
     /**
      * @var CrontabFileHandler
      */
-    private $cronFileHandler;
+    private $crontabFileHandler;
 
     /**
      * @var crontab file
@@ -28,15 +28,15 @@ class Entries
     
     /**
      * @param Crontab $crontab
-     * @param CrontabFileHandler $cronFileHandler
+     * @param CrontabFileHandler $crontabFileHandler
      */
     public function __construct(
         Crontab $crontab, 
-        CrontabFileHandler $cronFileHandler,
+        CrontabFileHandler $crontabFileHandler,
         $crontabFile = null)
     {
-        $this->crontab         = $crontab; 
-        $this->cronFileHandler = $cronFileHandler;
+        $this->crontab            = $crontab; 
+        $this->crontabFileHandler = $crontabFileHandler;
 
         if (!is_null($crontabFile))
         {
@@ -67,6 +67,24 @@ class Entries
     }
 
     /**
+     * Loads cronjobs form file
+     *
+     * @param string path to file
+     * @return $this
+     */
+    public function loadFromFile($file)
+    {
+        if (!file_exists($file))
+        {
+            throw new \InvalidArgumentException("File: $file not found");
+        }
+
+        $this->crontabFileHandler->parseFromFile($this->crontab, $file);
+
+        return $this;
+    }
+
+    /**
      * Adds a cron
      * 
      * @param Job $job
@@ -74,15 +92,7 @@ class Entries
      */
     public function add(Job $job, $file = null)
     {
-        if (is_null($job))
-        {
-            return false;
-        }
-        
-        $this->crontab->addJob($job); //->write();
-        
-        // save the job
-        $this->save($file);
+        $this->crontab->addJob($job);
         
         return $this;
     }
@@ -92,15 +102,17 @@ class Entries
      * 
      * @param string $file /path/to/file/
      */
-    public function save($file = null)
+    public function save()
     {
-        if (is_null($file))
+        $crontabFile = $this->getCrontabFile();
+
+        if (!is_null($crontabFile))
         {
-            $cronFileHandler->write($this->crontab);
+            $this->crontabFileHandler->writeToFile($this->crontab, $crontabFile);
         }
         else
         {
-            $cronFileHandler->writeToFile($this->crontab, $file);
+            $this->crontabFileHandler->write($this->crontab);
         }
 
         return $this;
