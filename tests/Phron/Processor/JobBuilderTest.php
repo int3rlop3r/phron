@@ -12,12 +12,9 @@ class JobBuilderTest extends PHPUnit_Framework_TestCase
 {
     private $jobBuilder;
     
-    private $job;
-    
     public function setUp()
     {
-        $this->job       = new Job;
-        $this->jobBuilder = new JobBuilder($this->job);
+        $this->jobBuilder = new JobBuilder;
     }
     
     public function testDefaultExpressionCount()
@@ -26,44 +23,69 @@ class JobBuilderTest extends PHPUnit_Framework_TestCase
         
         $this->assertCount(5, $fieldList);
     }
-    
-    public function testSettersAndGetters()
+
+    public function testBuilder()
     {
-        $fieldList = $this->jobBuilder->getFieldList();
-        $defaultValue = '*';
-        
-        // Test cron expressions
-        foreach ($fieldList as $field => $methodName) {
-            
-            // Make sure setters and getters are calling the right function (:
-            $setterExists = method_exists($this->job, 'set' . $methodName);
-            $getterExists = method_exists($this->job, 'get' . $methodName);
-            
+        $fieldValue = '*';
+        $fieldList  = $this->jobBuilder->getFieldList();
+
+        foreach ($fieldList as $field => $methodName)
+        {
+            $setter = 'set' . $methodName;
+            $getter = 'get' . $methodName;
+
+            $setterExists = method_exists($this->jobBuilder, $setter);
+            $getterExists = method_exists($this->jobBuilder, $getter);
+
+
             $this->assertTrue($setterExists);
             $this->assertTrue($getterExists);
-            
-            // Test getters and setters
+
             $value = $this->jobBuilder
-                          ->setFieldValue($field, $defaultValue)
-                          ->getFieldValue($field);
-            
-            $this->assertEquals($defaultValue, $value);
+                ->$setter($fieldValue)
+                ->$getter();
+
+            $this->assertEquals($value, $fieldValue);
         }
-        
+
         // Test Command
         $this->assertEquals('ls -l', $this->jobBuilder->setCommand('ls -l')->getCommand());
-        
+
         // Test Name
         $this->assertEquals('test comment', $this->jobBuilder->setName('test comment')->getName());
-        
+
         // Test Log File
         $this->assertEquals('/tmp/logfile', $this->jobBuilder->setLogFile('/tmp/logfile')->getLogfile());
-        
+
         // Test Error File
-        $this->assertEquals('/tmp/errorfile', $this->jobBuilder->setLogFile('/tmp/errorfile')->getLogfile());
-        
+        $this->assertEquals('/tmp/errorfile', $this->jobBuilder->setErrorFile('/tmp/errorfile')->getErrorFile());
+
         // Test Job
-        $this->assertInstanceOf('Crontab\Job', $this->jobBuilder->getJob());
+        $job = $this->jobBuilder->make()->getJob();
+        $this->assertInstanceOf('Crontab\Job', $job);
+
+        // Test Job
+        $job = $this->jobBuilder->make()->getJob();
+        $this->assertInstanceOf('Crontab\Job', $job);
+
+        // Check if job was created as expected
+        
+        // Check fields
+        foreach ($fieldList as $field => $methodName)
+        {
+            $getter = 'get' . $methodName;
+            $this->assertEquals('*', $job->$getter());
+        }
+
+        // Check other parts
+        $this->assertEquals('ls -l', $job->getCommand());
+        $this->assertEquals('test comment', $job->getComments());
+        $this->assertEquals('/tmp/logfile', $job->getLogfile());
+        $this->assertEquals('/tmp/errorfile', $job->getErrorFile());
+
+        // Clear everything
+        $this->jobBuilder->clear();
+        $this->assertNull($this->jobBuilder->getJob());
     }
-    
+
 }

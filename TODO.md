@@ -10,6 +10,6 @@ Also add a new arg 'debug' to test the command
 
 Generator
 ----------
-Remove dependency
-Let the Generator create new jobs
+Remove dependency                                     - done
+Let the Generator create new jobs                     - done
 Try to rename the class from Generator to Job Builder - done

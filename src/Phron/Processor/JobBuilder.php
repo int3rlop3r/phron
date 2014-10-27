@@ -44,17 +44,14 @@ class JobBuilder
     private $comment;
 
     /**
+     * @var array
+     */
+    private $jobContainer;
+
+    /**
      * @var Job Job object
      */
     private $job;
-
-    /**
-     * @param Job $job Job object
-     */
-    public function __construct(Job $job)
-    {
-        $this->job = $job;
-    }
 
     /**
      * Checks if the field name was valid
@@ -89,7 +86,7 @@ class JobBuilder
      * @param string $item Cron expression field
      * @return string Value of the field
      */
-    public function getFieldValue($item)
+    public function getFieldValueTest($item)
     {
         $this->validField($item);
 
@@ -105,7 +102,7 @@ class JobBuilder
      * @param string $value Value of the field
      * @return $this
      */
-    public function setFieldValue($item, $value)
+    public function setFieldValueTest($item, $value)
     {
         $this->validField($item);
 
@@ -117,6 +114,166 @@ class JobBuilder
     }
 
     /**
+     * Gets the value of a field
+     * 
+     * @param string $item Cron expression field
+     * @return string
+     */
+    public function getFieldValue($item)
+    {
+        $this->validField($item);
+
+        if (!isset($this->jobContainer[$this->fields[$item]]))
+        {
+            return null;
+        }
+
+        return $this->jobContainer[$this->fields[$item]];
+    }
+
+    /**
+     * Set the value of a field
+     * 
+     * @param string $item Cron Expression Field
+     * @param string $value Value of the field
+     * @return $this
+     */
+    public function setFieldValue($item, $value)
+    {
+        $this->validField($item);
+
+        $key = $this->fields[$item];
+
+        $this->jobContainer[$key] = $value;
+
+        return $this;
+    }
+
+
+        /*
+         *'minutes'    => 'Minute',
+         *'hour'       => 'Hour',
+         *'dayofmonth' => 'DayOfMonth',
+         *'month'      => 'Month',
+         *'dayofweek'  => 'DayOfWeek',
+         */
+
+    /**
+     * Set the minute
+     *
+     * @param string minute field
+     * @return $this
+     */
+    public function setMinute($minute)
+    {
+        $this->jobContainer['Minute'] = $minute;
+
+        return $this;
+    }
+
+    /**
+     * Get minute string
+     *
+     * @return string
+     */
+    public function getMinute()
+    {
+        return $this->jobContainer['Minute'];
+    }
+
+    /**
+     * Set the hour
+     *
+     * @param string $hour hour field
+     * @return $this
+     */
+    public function setHour($hour)
+    {
+        $this->jobContainer['Hour'] = $hour;
+
+        return $this;
+    }
+
+    /**
+     * Get the hour field
+     *
+     * @return string
+     */
+    public function getHour()
+    {
+        return $this->jobContainer['Hour'];
+    }
+
+    /**
+     * Set day of month
+     *
+     * @param string $dayOfMonth
+     * @return $this
+     */
+    public function setDayOfMonth($dayOfMonth)
+    {
+        $this->jobContainer['DayOfMonth'] = $dayOfMonth;
+
+        return $this;
+    }
+
+    /**
+     * Get the day of month
+     *
+     * @return string
+     */
+    public function getDayOfMonth()
+    {
+        return $this->jobContainer['DayOfMonth'];
+    }
+
+    /**
+     * Set month
+     *
+     * @param string $month month field
+     * @return $this
+     */
+    public function setMonth($month)
+    {
+        $this->jobContainer['Month'] = $month;
+
+        return $this;
+    }
+
+    /**
+     * Get month field
+     *
+     * @return string
+     */
+    public function getMonth()
+    {
+        return $this->jobContainer['Month'];
+    }
+
+    /**
+     * Set day of the week
+     *
+     * @param string $dayOfweek
+     * @return $this
+     */
+    public function setDayOfWeek($dayOfWeek)
+    {
+        $this->jobContainer['DayOfWeek'] = $dayOfWeek;
+
+        return $this;
+    }
+
+    /**
+     * Get day of the week
+     *
+     * @return string
+     */
+    public function getDayOfWeek()
+    {
+        return $this->jobContainer['DayOfWeek'];
+    }
+    
+    /**
      * Sets the command to be run
      * 
      * @param string $command Command to be executed
@@ -124,7 +281,7 @@ class JobBuilder
      */
     public function setCommand($command)
     {
-        $this->job->setCommand($command);
+        $this->jobContainer['Command'] = $command;
 
         return $this;
     }
@@ -136,7 +293,7 @@ class JobBuilder
      */
     public function getCommand()
     {
-        return $this->job->getCommand();
+        return $this->jobContainer['Command'];
     }
 
     /**
@@ -147,7 +304,7 @@ class JobBuilder
      */
     public function setLogFile($logFile)
     {
-        $this->job->setLogFile($logFile);
+        $this->jobContainer['LogFile'] = $logFile;
 
         return $this;
     }
@@ -159,7 +316,7 @@ class JobBuilder
      */
     public function getLogfile()
     {
-        return $this->job->getLogFile();
+        return $this->jobContainer['LogFile'];
     }
 
     /**
@@ -170,7 +327,7 @@ class JobBuilder
      */
     public function setErrorFile($path)
     {
-        $this->job->setErrorFile($path);
+        $this->jobContainer['ErrorFile'] = $path;
 
         return $this;
     }
@@ -182,7 +339,7 @@ class JobBuilder
      */
     public function getErrorFile()
     {
-        return $this->job->getErrorFile();
+        return $this->jobContainer['ErrorFile'];
     }
 
     /**
@@ -198,7 +355,7 @@ class JobBuilder
             $name = 'no name';
         }
 
-        $this->job->setComments($name);
+        $this->jobContainer['Comments'] = ($name);
 
         return $this;
     }
@@ -210,17 +367,61 @@ class JobBuilder
      */
     public function getName()
     {
-        return $this->job->getComments();
+        //return $this->job->getComments();
+        return $this->jobContainer['Comments'];
     }
 
     /**
-     * Returns the job instance
-     * 
-     * @return Job Job instance
+     * Clears all fields, etc.
+     *
+     * @return $this
+     */
+    public function clear()
+    {
+        $this->jobContainer = array();
+        $this->job          = null;
+        
+        return $this;
+    }
+
+    /**
+     * Creates a new Job
+     *
+     * @return $this
+     */
+    public function make()
+    {
+        $job = new Job;
+
+        foreach ($this->jobContainer as $callbackPart => $cronData)
+        {
+            $callback = 'set' . $callbackPart;
+            \call_user_func_array(array($job, $callback), array($cronData));
+        }
+
+        return $this->setJob($job);
+    }
+
+    /**
+     * Sets the job
+     *
+     * @param Job $job
+     * @return $this
+     */
+    public function setJob(Job $job)
+    {
+        $this->job = $job;
+
+        return $this;
+    }
+
+    /**
+     * Gets the job that was already made
+     *
+     * @return Job
      */
     public function getJob()
     {
         return $this->job;
     }
-
 }

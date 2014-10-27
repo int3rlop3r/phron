@@ -17,10 +17,9 @@ use Phron\Command\DeleteCommand;
  | Spawn objects
  | -------------------
  */
-$job                = new Job;
 $crontab            = new Crontab;
 $crontabFileHandler = new CrontabFileHandler;
-$jobBuilder         = new JobBuilder($job);
+$jobBuilder         = new JobBuilder;
 $entries            = new Entries($crontab);
 $fieldFactory       = new FieldFactory;
 $addCommand         = new AddCommand($entries, $jobBuilder, $fieldFactory);
