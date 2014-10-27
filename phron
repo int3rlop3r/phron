@@ -6,7 +6,7 @@ use Crontab\Crontab;
 use Crontab\CrontabFileHandler;
 use Cron\FieldFactory;
 use Phron\Processor\Entries;
-use Phron\Processor\Generator;
+use Phron\Processor\JobBuilder;
 use Symfony\Component\Console\Application;
 use Phron\Command\AddCommand;
 use Phron\Command\ShowCommand;
@@ -20,12 +20,12 @@ use Phron\Command\DeleteCommand;
 $job                = new Job;
 $crontab            = new Crontab;
 $crontabFileHandler = new CrontabFileHandler;
-$generator          = new Generator($job);
+$jobBuilder         = new JobBuilder($job);
 $entries            = new Entries($crontab);
 $fieldFactory       = new FieldFactory;
-$addCommand         = new AddCommand($entries, $generator, $fieldFactory);
-$showCommand        = new ShowCommand($entries, $generator, $fieldFactory);
-$deleteCommand      = new DeleteCommand($entries, $generator, $fieldFactory);
+$addCommand         = new AddCommand($entries, $jobBuilder, $fieldFactory);
+$showCommand        = new ShowCommand($entries, $jobBuilder, $fieldFactory);
+$deleteCommand      = new DeleteCommand($entries, $jobBuilder, $fieldFactory);
 
 $app = new Application('Phron', '0.1');
 

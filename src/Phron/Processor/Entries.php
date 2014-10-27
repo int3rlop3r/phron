@@ -195,8 +195,6 @@ class Entries
     {
         $this->crontab->removeAllJobs();
         
-        $this->crontab->write();
-        
         return $this;
     }
     

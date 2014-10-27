@@ -8,19 +8,19 @@
 
 use Cron\FieldFactory;
 use Phron\Processor\Entries;
-use Phron\Processor\Generator;
+use Phron\Processor\JobBuilder;
 use Symfony\Component\Console\Input\InputArgument;
 
 class DeleteCommand extends AbstractCommand
 {
     /**
      * @param Entries $entries
-     * @param Generator $generator
+     * @param JobBuilder $jobBuilder
      * @param FieldFactory $fieldFactory
      */
-    public function __construct(Entries $entries, Generator $generator, FieldFactory $fieldFactory)
+    public function __construct(Entries $entries, JobBuilder $jobBuilder, FieldFactory $fieldFactory)
     {
-        parent::__construct($entries, $generator, $fieldFactory);
+        parent::__construct($entries, $jobBuilder, $fieldFactory);
     }
     
     public function configure()

@@ -1,35 +1,35 @@
 <?php
 /**
- * Description of GeneratorTest
+ * Description of JobBuilderTest
  *
  * @author jonathan
  */
 
-use Phron\Processor\Generator;
+use Phron\Processor\JobBuilder;
 use Crontab\Job;
 
-class GeneratorTest extends PHPUnit_Framework_TestCase
+class JobBuilderTest extends PHPUnit_Framework_TestCase
 {
-    private $generator;
+    private $jobBuilder;
     
     private $job;
     
     public function setUp()
     {
         $this->job       = new Job;
-        $this->generator = new Generator($this->job);
+        $this->jobBuilder = new JobBuilder($this->job);
     }
     
     public function testDefaultExpressionCount()
     {
-        $fieldList = $this->generator->getFieldList();
+        $fieldList = $this->jobBuilder->getFieldList();
         
         $this->assertCount(5, $fieldList);
     }
     
     public function testSettersAndGetters()
     {
-        $fieldList = $this->generator->getFieldList();
+        $fieldList = $this->jobBuilder->getFieldList();
         $defaultValue = '*';
         
         // Test cron expressions
@@ -43,7 +43,7 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
             $this->assertTrue($getterExists);
             
             // Test getters and setters
-            $value = $this->generator
+            $value = $this->jobBuilder
                           ->setFieldValue($field, $defaultValue)
                           ->getFieldValue($field);
             
@@ -51,19 +51,19 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
         }
         
         // Test Command
-        $this->assertEquals('ls -l', $this->generator->setCommand('ls -l')->getCommand());
+        $this->assertEquals('ls -l', $this->jobBuilder->setCommand('ls -l')->getCommand());
         
         // Test Name
-        $this->assertEquals('test comment', $this->generator->setName('test comment')->getName());
+        $this->assertEquals('test comment', $this->jobBuilder->setName('test comment')->getName());
         
         // Test Log File
-        $this->assertEquals('/tmp/logfile', $this->generator->setLogFile('/tmp/logfile')->getLogfile());
+        $this->assertEquals('/tmp/logfile', $this->jobBuilder->setLogFile('/tmp/logfile')->getLogfile());
         
         // Test Error File
-        $this->assertEquals('/tmp/errorfile', $this->generator->setLogFile('/tmp/errorfile')->getLogfile());
+        $this->assertEquals('/tmp/errorfile', $this->jobBuilder->setLogFile('/tmp/errorfile')->getLogfile());
         
         // Test Job
-        $this->assertInstanceOf('Crontab\Job', $this->generator->getJob());
+        $this->assertInstanceOf('Crontab\Job', $this->jobBuilder->getJob());
     }
     
 }

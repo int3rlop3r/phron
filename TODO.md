@@ -12,4 +12,4 @@ Generator
 ----------
 Remove dependency
 Let the Generator create new jobs
-Try to rename the class from Generator to Job Builder
+Try to rename the class from Generator to Job Builder - done

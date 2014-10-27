@@ -7,7 +7,7 @@
 use Crontab\Job;
 use Crontab\Crontab;
 use Phron\Processor\Entries;
-use Phron\Processor\Generator;
+use Phron\Processor\JobBuilder;
 use Crontab\CrontabFileHandler;
 
 class EntriesTest extends PHPUnit_Framework_TestCase
@@ -63,5 +63,7 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         $this->entries->loadFromFile($this->crontabDataFile);
 
         $this->assertEquals(4, count($this->entries->all()));
+
+        $this->entries->clear(); // remove all cronjobs
     }
 }

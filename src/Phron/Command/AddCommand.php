@@ -7,16 +7,16 @@
  */
 
 use Cron\FieldFactory;
-use Phron\Processor\Generator;
+use Phron\Processor\JobBuilder;
 use Phron\Processor\Entries;
 use Phron\Processor\Questions\QuestionFactory;
 use Phron\Processor\Questions\Questionable;
 
 class AddCommand extends AbstractCommand
 {
-    public function __construct(Entries $entries, Generator $generator, FieldFactory $fieldFactory)
+    public function __construct(Entries $entries, JobBuilder $jobBuilder, FieldFactory $fieldFactory)
     {
-        parent::__construct($entries, $generator, $fieldFactory);
+        parent::__construct($entries, $jobBuilder, $fieldFactory);
     }
     
     public function configure()
@@ -28,12 +28,12 @@ class AddCommand extends AbstractCommand
 
     public function fire()
     {
-        $itemList = $this->generator->getFieldList();
+        $itemList = $this->jobBuilder->getFieldList();
         
         // set the name of the cron
         $name = $this->ask('Name of the task: ');
         
-        $this->generator->setName($name);
+        $this->jobBuilder->setName($name);
         
         // generate the expression
         foreach ($itemList as $item => $className)
@@ -54,7 +54,7 @@ class AddCommand extends AbstractCommand
                     );
             }
             
-            $this->generator->setFieldValue($item, $userInput);
+            $this->jobBuilder->setFieldValue($item, $userInput);
         }
         
         // set command
@@ -68,14 +68,14 @@ class AddCommand extends AbstractCommand
                         return $answer;
                     });
         
-        $this->generator->setCommand($command);
+        $this->jobBuilder->setCommand($command);
         
         // set log file
         $logFile = $this->ask('File to log output: ');
         
         if (trim($logFile) != '')
         {
-            $this->generator->setLogFile($logFile);
+            $this->jobBuilder->setLogFile($logFile);
         }
         
         // set error log file
@@ -83,10 +83,10 @@ class AddCommand extends AbstractCommand
         
         if (trim($errorLog))
         {
-            $this->generator->setErrorFile($errorLog);
+            $this->jobBuilder->setErrorFile($errorLog);
         }
         
-        if ($this->entries->add($this->generator->getJob()))
+        if ($this->entries->add($this->jobBuilder->getJob()))
         {
             $this->writeln("New cron added");
         }

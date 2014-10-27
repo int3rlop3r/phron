@@ -3,13 +3,13 @@
 namespace Phron\Processor;
 
 /**
- * Generates and manipulates a cron tab
- *
+ * JobBuilder
+ * 
  * @author jonathan
  */
 use Crontab\Job;
 
-class Generator
+class JobBuilder
 {
 
     /**

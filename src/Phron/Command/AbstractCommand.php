@@ -7,7 +7,7 @@
  */
 
 use Cron\FieldFactory;
-use Phron\Processor\Generator;
+use Phron\Processor\JobBuilder;
 use Phron\Processor\Entries;
 use Symfony\Component\Console\Command\Command;
 
@@ -26,21 +26,21 @@ abstract class AbstractCommand extends Command
     protected $fieldFactory;
     
     /**
-     * @var Generator
+     * @var JobBuilder
      */
-    protected $generator;
+    protected $jobBuilder;
     
     /**
      * @param Entries $entries
-     * @param Generator $generator
+     * @param JobBuilder $jobBuilder
      * @param FieldFactory $fieldFactory
      */
-    public function __construct(Entries $entries, Generator $generator, FieldFactory $fieldFactory)
+    public function __construct(Entries $entries, JobBuilder $jobBuilder, FieldFactory $fieldFactory)
     {
         parent::__construct();
         
         $this->entries      = $entries;
-        $this->generator    = $generator;
+        $this->jobBuilder   = $jobBuilder;
         $this->fieldFactory = $fieldFactory;
     }
     

@@ -7,7 +7,7 @@
  */
 
 use Cron\FieldFactory;
-use Phron\Processor\Generator;
+use Phron\Processor\JobBuilder;
 use Phron\Processor\Entries;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
@@ -16,12 +16,12 @@ class ShowCommand extends AbstractCommand
 {
     /**
      * @param Entries $entries
-     * @param Generator $generator
+     * @param JobBuilder $jobBuilder
      * @param FieldFactory $fieldFactory
      */
-    public function __construct(Entries $entries, Generator $generator, FieldFactory $fieldFactory)
+    public function __construct(Entries $entries, JobBuilder $jobBuilder, FieldFactory $fieldFactory)
     {
-        parent::__construct($entries, $generator, $fieldFactory);
+        parent::__construct($entries, $jobBuilder, $fieldFactory);
     }
     
     public function configure()
