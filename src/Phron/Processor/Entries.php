@@ -90,7 +90,7 @@ class Entries
      * @param Job $job
      * @return $this false on failure
      */
-    public function add(Job $job, $file = null)
+    public function add(Job $job)
     {
         $this->crontab->addJob($job);
         
@@ -160,7 +160,6 @@ class Entries
             throw new InvalidArgumentException('"start" value cannot be greater than "length"');
         }
         
-        //die("Start: $start, Length: $length");
         return array_slice($jobs, $start, $length);
     }
     
