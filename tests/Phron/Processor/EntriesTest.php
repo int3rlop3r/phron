@@ -3,7 +3,6 @@
 /**
  * @author Jonathan Fernandes <int3rlop3r@yahoo.in>
  */
-
 use Crontab\Job;
 use Crontab\Crontab;
 use Phron\Processor\Entries;
@@ -21,10 +20,12 @@ class EntriesTest extends PHPUnit_Framework_TestCase
     private $crontab;
 
     private $crontabFileHandler;
+    
+    private $jobBuilder;
 
     public function setUp()
     {
-        $pathToFixture = __DIR__.'/../../fixture';
+        $pathToFixture = realpath(__DIR__.'/../../fixture');
 
         $this->crontabFile     = $pathToFixture . '/crontabFile';
         $this->crontabDataFile = $pathToFixture . '/crontabDataFile';
@@ -35,6 +36,8 @@ class EntriesTest extends PHPUnit_Framework_TestCase
 
         $this->crontab = new Crontab;
         $this->entries = new Entries($this->crontab, $this->crontabFileHandler);
+
+        $this->jobBuilder = new JobBuilder;
     }
 
     public function resetFile()
@@ -217,5 +220,62 @@ class EntriesTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
+    }
+
+    public function testFind()
+    {
+        // create 4-5 jobs
+        $this->entries->setCrontabFile($this->crontabFile);
+        
+        $job = $this->jobBuilder->setName('Task_1')->setCommand('Command_1')->make()->getJob();
+        $this->entries->add($job);
+
+        $this->jobBuilder->clear(); // clear task 1 
+
+        $job = $this->jobBuilder->setName('Task_2')->setCommand('Command_2')->make()->getJob();
+        $this->entries->add($job);
+
+        $this->jobBuilder->clear(); // clear task 2 
+
+        $job = $this->jobBuilder->setName('Task_3')->setCommand('Command_3')->make()->getJob();
+        $this->entries->add($job); 
+
+        $this->jobBuilder->clear(); // clear task 3
+
+        $job = $this->jobBuilder->setName('Task_4')->setCommand('Command_4')->make()->getJob();
+        $this->entries->add($job);
+
+        $this->jobBuilder->clear(); // clear task 4
+
+        $job = $this->jobBuilder->setName('Task_5')->setCommand('Command_5')->make()->getJob();
+        $this->entries->add($job);
+
+        $this->jobBuilder->clear(); // clear task 5
+
+        // write them to the file
+        $this->entries->save();
+        $this->entries->clear();
+        
+        $this->entries->loadFromFile($this->crontabFile);
+        
+        // check command names
+        $job1 = $this->entries->find(1);
+        $job2 = $this->entries->find(2);
+        $job3 = $this->entries->find(3);
+        $job4 = $this->entries->find(4);
+        $job5 = $this->entries->find(5);
+        
+        $this->assertEquals('Command_1', $job1->getCommand());
+        $this->assertEquals('Command_2', $job2->getCommand());
+        $this->assertEquals('Command_3', $job3->getCommand());
+        $this->assertEquals('Command_4', $job4->getCommand());
+        $this->assertEquals('Command_5', $job5->getCommand());
+        
+        // check name / comments
+        $this->assertEquals('Task_1', $job1->getComments());
+        $this->assertEquals('Task_2', $job2->getComments());
+        $this->assertEquals('Task_3', $job3->getComments());
+        $this->assertEquals('Task_4', $job4->getComments());
+        $this->assertEquals('Task_5', $job5->getComments());
     }
 }

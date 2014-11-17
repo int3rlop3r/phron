@@ -52,6 +52,13 @@ class Entries
      */
     public function setCrontabFile($file)
     {
+        $file = realpath($file);
+        
+        if (!$file)
+        {
+            throw new \InvalidArgumentException("Could not find file: $file");
+        }
+        
         $this->crontabFile = $file;
 
         return $this;
@@ -59,6 +66,7 @@ class Entries
 
     /**
      * Gets the crontab file
+     * 
      * @return $this
      */
     public function getCrontabFile()
@@ -74,7 +82,9 @@ class Entries
      */
     public function loadFromFile($file)
     {
-        if (!file_exists($file))
+        $file = realpath($file);
+        
+        if (!$file)
         {
             throw new \InvalidArgumentException("File: $file not found");
         }
@@ -105,7 +115,7 @@ class Entries
     public function save()
     {
         $crontabFile = $this->getCrontabFile();
-
+        
         if (!is_null($crontabFile))
         {
             $this->crontabFileHandler->writeToFile($this->crontab, $crontabFile);
@@ -136,10 +146,11 @@ class Entries
      */
     public function find($id)
     {
+        $realIndex = $id -1;
         $jobs = $this->all();
         $jobs = array_values($jobs);
         
-        return isset($jobs[$id]) ? $jobs[$id]: null;
+        return isset($jobs[$realIndex]) ? $jobs[$realIndex]: null;
     }
     
     /**
