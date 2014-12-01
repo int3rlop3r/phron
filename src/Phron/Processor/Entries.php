@@ -160,17 +160,20 @@ class Entries
      * @param int $length
      * @return array list of tasks
      */
-    public function getByRange($start, $length = null)
+    public function getByRange($start, $end)
     {
-        $jobs = $this->all();
-        
+        $jobs  = $this->all();
         $total = count($jobs);
         
-        if ($start > $total || ($start + $length) > $total)
+        if ($start > $total || $end > $total || $start > $end)
         {
-            throw new InvalidArgumentException('"start" value cannot be greater than "length"');
+            throw new InvalidArgumentException("Invalid 'start/end' provided.");
         }
-        
+
+        $start--;
+
+        $length = $end - $start;
+
         return array_slice($jobs, $start, $length);
     }
     
@@ -186,7 +189,8 @@ class Entries
         {
             $aJob = $this->find($id -1);
             
-            if ($aJob instanceof Job) {
+            if ($aJob instanceof Job)
+            {
                 $this->crontab->removeJob($aJob);
             }
         }

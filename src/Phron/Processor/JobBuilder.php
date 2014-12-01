@@ -1,6 +1,4 @@
-<?php
-
-namespace Phron\Processor;
+<?php namespace Phron\Processor;
 
 /**
  * JobBuilder
@@ -11,7 +9,6 @@ use Crontab\Job;
 
 class JobBuilder
 {
-
     /**
      * @var array Field List mapped to function names of the Job class
      */
