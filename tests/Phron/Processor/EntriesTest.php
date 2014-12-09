@@ -342,11 +342,21 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         $this->entries->add($job4);
 
         $this->jobBuilder->clear(); // clear task 4
-
+        
         $job5 = $this->jobBuilder->setName('Task_5')->setCommand('Command_5')->make()->getJob();
         $this->entries->add($job5);
         
         $this->jobBuilder->clear(); // clear task 5
+        
+        $job7 = $this->jobBuilder->setName('Task_7')->setCommand('Command_7')->make()->getJob();
+        $this->entries->add($job7);
+        
+        $this->jobBuilder->clear(); // clear task 7
+        
+        $job8 = $this->jobBuilder->setName('Task_8')->setCommand('Command_8')->make()->getJob();
+        $this->entries->add($job8);
+        
+        $this->jobBuilder->clear(); // clear task 8
         
         // Get the command by id
         $job1 = $this->entries->find(1);
@@ -359,7 +369,33 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         // Check that the task was deleted
         $job1 = $this->entries->find(1);
         $command1 = $job1->getCommand();
+        
         $this->assertNotEquals('Command_1', $command1);
+        $this->assertCount(6, $this->entries->all());
+        
+        // Get new job values
+        $job1 = $this->entries->find(2);
+        $command1 = $job1->getCommand();
+        $job2 = $this->entries->find(3);
+        $command2 = $job2->getCommand();
+        
+        $this->assertEquals('Command_3', $command1);
+        $this->assertEquals('Command_4', $command2);
+        
+        // Delete the tasks
+        $this->entries->delete(array(2, 3));
+        
+        $job1 = $this->entries->find(2);
+        $command1 = $job1->getCommand();
+        $job2 = $this->entries->find(3);
+        $command2 = $job2->getCommand();
+        
+        $this->assertNotEquals('Command_3', $command1);
+        $this->assertNotEquals('Command_4', $command2);
+        
+        $this->assertEquals('Command_5', $command1);
+        $this->assertEquals('Command_7', $command2);
+        
         $this->assertCount(4, $this->entries->all());
         
         $this->entries->clear(); // remove all cronjobs
