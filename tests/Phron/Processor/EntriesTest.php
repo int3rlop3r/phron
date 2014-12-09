@@ -64,7 +64,7 @@ class EntriesTest extends PHPUnit_Framework_TestCase
     public function testLoadFromFile()
     {
         $this->entries->loadFromFile($this->crontabDataFile);
-
+        
         $this->assertEquals(4, count($this->entries->all()));
 
         $this->entries->clear(); // remove all cronjobs
@@ -155,6 +155,8 @@ class EntriesTest extends PHPUnit_Framework_TestCase
 
         $this->entries->add($job5);
         $this->assertEquals(5, count($this->entries->all()));
+        
+        $this->entries->clear(); // remove all cronjobs
     }
 
     public function crontabProvider()
@@ -277,6 +279,8 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Task_3', $job3->getComments());
         $this->assertEquals('Task_4', $job4->getComments());
         $this->assertEquals('Task_5', $job5->getComments());
+        
+        $this->entries->clear(); // remove all cronjobs
     }
 
     public function testGetByRange()
@@ -303,6 +307,8 @@ class EntriesTest extends PHPUnit_Framework_TestCase
 
         $job5 = $this->jobBuilder->setName('Task_5')->setCommand('Command_5')->make()->getJob();
         $this->entries->add($job5);
+        
+        $this->jobBuilder->clear(); // clear task 5
 
         $jobs = $this->entries->getByRange(2, 3);
         
@@ -313,5 +319,49 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($job3->getCommand(), $thirdJob->getCommand());
 
         $this->entries->clear();
+    }
+    
+    public function testDelete()
+    {
+        $job1 = $this->jobBuilder->setName('Task_1')->setCommand('Command_1')->make()->getJob();
+        $this->entries->add($job1);
+
+        $this->jobBuilder->clear(); // clear task 1 
+
+        $job2 = $this->jobBuilder->setName('Task_2')->setCommand('Command_2')->make()->getJob();
+        $this->entries->add($job2);
+
+        $this->jobBuilder->clear(); // clear task 2 
+
+        $job3 = $this->jobBuilder->setName('Task_3')->setCommand('Command_3')->make()->getJob();
+        $this->entries->add($job3); 
+
+        $this->jobBuilder->clear(); // clear task 3
+
+        $job4 = $this->jobBuilder->setName('Task_4')->setCommand('Command_4')->make()->getJob();
+        $this->entries->add($job4);
+
+        $this->jobBuilder->clear(); // clear task 4
+
+        $job5 = $this->jobBuilder->setName('Task_5')->setCommand('Command_5')->make()->getJob();
+        $this->entries->add($job5);
+        
+        $this->jobBuilder->clear(); // clear task 5
+        
+        // Get the command by id
+        $job1 = $this->entries->find(1);
+        $command1 = $job1->getCommand();
+        $this->assertEquals('Command_1', $command1);
+        
+        // Delete the task
+        $this->entries->delete(1);
+        
+        // Check that the task was deleted
+        $job1 = $this->entries->find(1);
+        $command1 = $job1->getCommand();
+        $this->assertNotEquals('Command_1', $command1);
+        $this->assertCount(4, $this->entries->all());
+        
+        $this->entries->clear(); // remove all cronjobs
     }
 }

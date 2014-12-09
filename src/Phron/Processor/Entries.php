@@ -180,22 +180,32 @@ class Entries
     /**
      * Delete tasks by ids
      * 
-     * @param array $ids ids of tasks to be deleted
+     * @param mixed $ids could either be an array of ids or a single id
      * @return $this
      */
-    public function deleteByIds(array $ids)
+    public function delete($ids)
     {
-        foreach ($ids as $id)
+        if (is_array($ids))
         {
-            $aJob = $this->find($id -1);
-            
-            if ($aJob instanceof Job)
+            foreach ($ids as $id)
             {
-                $this->crontab->removeJob($aJob);
+                $aJob = $this->find(intval($id) - 1);
+
+                if ($aJob instanceof Job)
+                {
+                    $this->crontab->removeJob($aJob);
+                }
             }
         }
-        
-        $this->save();
+        else
+        {
+            $job = $this->find($ids);
+            
+            if ($job instanceof Job)
+            {
+                $this->crontab->removeJob($job);
+            }
+        }
         
         return $this;
     }
