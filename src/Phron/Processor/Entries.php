@@ -178,6 +178,29 @@ class Entries
     }
     
     /**
+     * Get tasks by ids
+     * 
+     * @param array $ids
+     * @return array list of tasks
+     */
+    public function in(array $ids)
+    {
+        $result = array();
+        $jobs   = $this->all();
+        
+        foreach ($ids as $id)
+        {
+            $tmpJob = $this->find($id);
+            
+            if (is_null($tmpJob)) { continue; }
+            
+            $result[] = $tmpJob;
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Delete tasks by ids
      * 
      * @param mixed $ids could either be an array of ids or a single id
@@ -220,30 +243,6 @@ class Entries
         $this->crontab->removeAllJobs();
         
         return $this;
-    }
-    
-    /**
-     * Get tasks by ids
-     * 
-     * @param array $ids
-     * @return array list of tasks
-     */
-    public function inIds(array $ids)
-    {
-        $jobs = $this->all();
-        
-        $result = array();
-        
-        foreach ($ids as $id)
-        {
-            $tmpJob = isset($jobs[$id]) ? $jobs[$id]: null;
-            
-            if (is_null($tmpJob)) { continue; }
-            
-            $result[] = $tmpJob;
-        }
-        
-        return $result;
     }
     
     /**

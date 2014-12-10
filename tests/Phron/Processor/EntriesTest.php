@@ -285,38 +285,15 @@ class EntriesTest extends PHPUnit_Framework_TestCase
 
     public function testGetByRange()
     {
-        $job1 = $this->jobBuilder->setName('Task_1')->setCommand('Command_1')->make()->getJob();
-        $this->entries->add($job1);
-
-        $this->jobBuilder->clear(); // clear task 1 
-
-        $job2 = $this->jobBuilder->setName('Task_2')->setCommand('Command_2')->make()->getJob();
-        $this->entries->add($job2);
-
-        $this->jobBuilder->clear(); // clear task 2 
-
-        $job3 = $this->jobBuilder->setName('Task_3')->setCommand('Command_3')->make()->getJob();
-        $this->entries->add($job3); 
-
-        $this->jobBuilder->clear(); // clear task 3
-
-        $job4 = $this->jobBuilder->setName('Task_4')->setCommand('Command_4')->make()->getJob();
-        $this->entries->add($job4);
-
-        $this->jobBuilder->clear(); // clear task 4
-
-        $job5 = $this->jobBuilder->setName('Task_5')->setCommand('Command_5')->make()->getJob();
-        $this->entries->add($job5);
+        $this->entries->loadFromFile($this->crontabDataFile);
         
-        $this->jobBuilder->clear(); // clear task 5
-
         $jobs = $this->entries->getByRange(2, 3);
         
         $secondJob = array_shift($jobs);
         $thirdJob  = array_shift($jobs);
 
-        $this->assertEquals($job2->getCommand(), $secondJob->getCommand());
-        $this->assertEquals($job3->getCommand(), $thirdJob->getCommand());
+        $this->assertEquals('cmd2', $secondJob->getCommand());
+        $this->assertEquals('cmd3', $thirdJob->getCommand());
 
         $this->entries->clear();
     }
@@ -399,5 +376,24 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         $this->assertCount(4, $this->entries->all());
         
         $this->entries->clear(); // remove all cronjobs
+    }
+    
+    public function testIn()
+    {
+        $this->entries->loadFromFile($this->crontabDataFile);
+
+        $ids = array(2, 4);
+        
+        $jobArray = $this->entries->in($ids);
+        
+        $this->assertCount(2, $jobArray);
+        
+        $this->assertEquals('cmd2', $jobArray[0]->getCommand());
+        $this->assertEquals('cmd4', $jobArray[1]->getCommand());
+    }
+    
+    public function testUpdate()
+    {
+        $this->entries->loadFromFile($this->crontabDataFile);
     }
 }
