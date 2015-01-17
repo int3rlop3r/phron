@@ -51,8 +51,8 @@ class JobBuilderTest extends PHPUnit_Framework_TestCase
         // Test Command
         $this->assertEquals('ls -l', $this->jobBuilder->setCommand('ls -l')->getCommand());
 
-        // Test Name
-        $this->assertEquals('test comment', $this->jobBuilder->setName('test comment')->getName());
+        // Test Comments
+        $this->assertEquals('test comment', $this->jobBuilder->setComments('test comment')->getComments());
 
         // Test Log File
         $this->assertEquals('/tmp/logfile', $this->jobBuilder->setLogFile('/tmp/logfile')->getLogfile());

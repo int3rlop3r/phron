@@ -340,12 +340,12 @@ class JobBuilder
     }
 
     /**
-     * Sets the name for the cron
+     * Adds a comment for the cron
      * 
      * @param string $comments Comment / description of the crontab
      * @return $this
      */
-    public function setName($name)
+    public function setComments($name)
     {
         if (trim($name) == '')
         {
@@ -358,11 +358,11 @@ class JobBuilder
     }
 
     /**
-     * Gets the name of a cron
+     * Gets the Comment
      * 
      * @return string crontab comment / description
      */
-    public function getName()
+    public function getComments()
     {
         //return $this->job->getComments();
         return $this->jobContainer['Comments'];

@@ -229,27 +229,27 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         // create 4-5 jobs
         $this->entries->setCrontabFile($this->crontabFile);
         
-        $job = $this->jobBuilder->setName('Task_1')->setCommand('Command_1')->make()->getJob();
+        $job = $this->jobBuilder->setComments('Task_1')->setCommand('Command_1')->make()->getJob();
         $this->entries->add($job);
 
         $this->jobBuilder->clear(); // clear task 1 
 
-        $job = $this->jobBuilder->setName('Task_2')->setCommand('Command_2')->make()->getJob();
+        $job = $this->jobBuilder->setComments('Task_2')->setCommand('Command_2')->make()->getJob();
         $this->entries->add($job);
 
         $this->jobBuilder->clear(); // clear task 2 
 
-        $job = $this->jobBuilder->setName('Task_3')->setCommand('Command_3')->make()->getJob();
+        $job = $this->jobBuilder->setComments('Task_3')->setCommand('Command_3')->make()->getJob();
         $this->entries->add($job); 
 
         $this->jobBuilder->clear(); // clear task 3
 
-        $job = $this->jobBuilder->setName('Task_4')->setCommand('Command_4')->make()->getJob();
+        $job = $this->jobBuilder->setComments('Task_4')->setCommand('Command_4')->make()->getJob();
         $this->entries->add($job);
 
         $this->jobBuilder->clear(); // clear task 4
 
-        $job = $this->jobBuilder->setName('Task_5')->setCommand('Command_5')->make()->getJob();
+        $job = $this->jobBuilder->setComments('Task_5')->setCommand('Command_5')->make()->getJob();
         $this->entries->add($job);
 
         $this->jobBuilder->clear(); // clear task 5
@@ -300,37 +300,37 @@ class EntriesTest extends PHPUnit_Framework_TestCase
     
     public function testDelete()
     {
-        $job1 = $this->jobBuilder->setName('Task_1')->setCommand('Command_1')->make()->getJob();
+        $job1 = $this->jobBuilder->setComments('Task_1')->setCommand('Command_1')->make()->getJob();
         $this->entries->add($job1);
 
         $this->jobBuilder->clear(); // clear task 1 
 
-        $job2 = $this->jobBuilder->setName('Task_2')->setCommand('Command_2')->make()->getJob();
+        $job2 = $this->jobBuilder->setComments('Task_2')->setCommand('Command_2')->make()->getJob();
         $this->entries->add($job2);
 
         $this->jobBuilder->clear(); // clear task 2 
 
-        $job3 = $this->jobBuilder->setName('Task_3')->setCommand('Command_3')->make()->getJob();
+        $job3 = $this->jobBuilder->setComments('Task_3')->setCommand('Command_3')->make()->getJob();
         $this->entries->add($job3); 
 
         $this->jobBuilder->clear(); // clear task 3
 
-        $job4 = $this->jobBuilder->setName('Task_4')->setCommand('Command_4')->make()->getJob();
+        $job4 = $this->jobBuilder->setComments('Task_4')->setCommand('Command_4')->make()->getJob();
         $this->entries->add($job4);
 
         $this->jobBuilder->clear(); // clear task 4
         
-        $job5 = $this->jobBuilder->setName('Task_5')->setCommand('Command_5')->make()->getJob();
+        $job5 = $this->jobBuilder->setComments('Task_5')->setCommand('Command_5')->make()->getJob();
         $this->entries->add($job5);
         
         $this->jobBuilder->clear(); // clear task 5
         
-        $job7 = $this->jobBuilder->setName('Task_7')->setCommand('Command_7')->make()->getJob();
+        $job7 = $this->jobBuilder->setComments('Task_7')->setCommand('Command_7')->make()->getJob();
         $this->entries->add($job7);
         
         $this->jobBuilder->clear(); // clear task 7
         
-        $job8 = $this->jobBuilder->setName('Task_8')->setCommand('Command_8')->make()->getJob();
+        $job8 = $this->jobBuilder->setComments('Task_8')->setCommand('Command_8')->make()->getJob();
         $this->entries->add($job8);
         
         $this->jobBuilder->clear(); // clear task 8
@@ -394,6 +394,12 @@ class EntriesTest extends PHPUnit_Framework_TestCase
     
     public function testUpdate()
     {
+        $taskToUpdate = 1;
         $this->entries->loadFromFile($this->crontabDataFile);
+        
+        $task = $this->entries->find($taskToUpdate);
+        $task->setMinute(15);
+
+        $this->assertEquals(15, $task->getMinute());
     }
 }
