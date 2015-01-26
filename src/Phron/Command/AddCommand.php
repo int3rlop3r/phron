@@ -10,7 +10,6 @@ use Cron\FieldFactory;
 use Phron\Processor\JobBuilder;
 use Phron\Processor\Entries;
 use Phron\Processor\Questions\QuestionFactory;
-use Phron\Processor\Questions\Questionable;
 
 class AddCommand extends AbstractCommand
 {
@@ -25,17 +24,16 @@ class AddCommand extends AbstractCommand
              ->setDescription('Create a new task')
              ->setHelp('Create a new task');
     }
-
-    public function fire()
+    
+    /**
+     * Asks for and generate field values.
+     * 
+     * @return $this
+     */
+    public function askFieldQuestions()
     {
         $itemList = $this->jobBuilder->getFieldList();
         
-        // set the name of the cron
-        $name = $this->ask('Name of the task: ');
-        
-        $this->jobBuilder->setName($name);
-        
-        // generate the expression
         foreach ($itemList as $item => $className)
         {
             $questionClass = QuestionFactory::create($className, $this->fieldFactory);
@@ -56,6 +54,18 @@ class AddCommand extends AbstractCommand
             
             $this->jobBuilder->setFieldValue($item, $userInput);
         }
+    }
+
+    public function fire()
+    {
+        // set the name of the cron
+        $name = $this->ask('Name of the task / Comments: ');
+        $this->jobBuilder->setComments($name);
+
+        //$data = $this->getHelper('table');
+        
+        // generate the expression
+        $this->askFieldQuestions();
         
         // set command
         $command =  $this->askAndValidate('Enter Command: ', function($answer)
@@ -86,11 +96,14 @@ class AddCommand extends AbstractCommand
             $this->jobBuilder->setErrorFile($errorLog);
         }
         
-        if ($this->entries->add($this->jobBuilder->getJob()))
+        try
         {
+            $jobBuilder = $this->jobBuilder->make();
+            $this->entries->add($jobBuilder->getJob());
+            $this->entries->save();
             $this->writeln("New cron added");
         }
-        else
+        catch (Exception $ex)
         {
             $this->writeln("Failed to add cron");
         }

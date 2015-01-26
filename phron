@@ -20,19 +20,17 @@ use Phron\Command\DeleteCommand;
 $crontab            = new Crontab;
 $crontabFileHandler = new CrontabFileHandler;
 $jobBuilder         = new JobBuilder;
-$entries            = new Entries($crontab);
 $fieldFactory       = new FieldFactory;
+$entries            = new Entries($crontab, $crontabFileHandler);
 $addCommand         = new AddCommand($entries, $jobBuilder, $fieldFactory);
 $showCommand        = new ShowCommand($entries, $jobBuilder, $fieldFactory);
 $deleteCommand      = new DeleteCommand($entries, $jobBuilder, $fieldFactory);
-
-$app = new Application('Phron', '0.1');
-
 
 /*--------------------
  | Add them to the app
  | -------------------
  */
+$app = new Application('Phron', '0.1');
 $app->add($addCommand);
 $app->add($showCommand);
 $app->add($deleteCommand);
