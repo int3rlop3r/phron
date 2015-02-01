@@ -95,13 +95,20 @@ class AddCommand extends AbstractCommand
         {
             $this->jobBuilder->setErrorFile($errorLog);
         }
-        
+
         try
         {
-            $jobBuilder = $this->jobBuilder->make();
-            $this->entries->add($jobBuilder->getJob());
-            $this->entries->save();
-            $this->writeln("New cron added");
+            $job = $this->jobBuilder->make()->getJob();
+            if (!$this->confirm("Continue with action?"))
+            {
+                $this->entries->add($job);
+                $this->entries->save();
+                $this->writeln("New cron added");
+            }
+            else
+            {
+                $this->writeln("Operation cancelled.");
+            }
         }
         catch (Exception $ex)
         {
