@@ -63,6 +63,7 @@ class EntriesTest extends PHPUnit_Framework_TestCase
 
     public function testLoadFromFile()
     {
+        var_dump(file_get_contents($this->crontabDataFile));die();
         $this->entries->loadFromFile($this->crontabDataFile);
         
         $this->assertEquals(4, count($this->entries->all()));

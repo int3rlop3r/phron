@@ -4,6 +4,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 trait Command {
 
@@ -80,7 +81,6 @@ trait Command {
     {
         $dialog   = $this->getHelper("dialog");
         $question = '<comment>'.$question.'</comment> ';
-        
         return $dialog->askAndValidate($this->output, $question, $validationHandler, false);
     }
     
@@ -98,6 +98,21 @@ trait Command {
         
         return $dialog->select($this->output, $question, $options, 0);
     }
+
+    /**
+     * Ask the user to confirm an action
+     *
+     * @param string $question
+     * @return string
+     */
+    public function confirm($question)
+    {
+        $formattedQuestion = "<question>$question [y/n]</question>";
+        $dialog   = $this->getHelper("question");
+        $question = new ConfirmationQuestion($formattedQuestion, false);
+
+        return $dialog->ask($this->input, $this->output, $question);
+    }
     
     /**
      * Ask the user the given secret question.
@@ -110,5 +125,16 @@ trait Command {
         $question = '<comment>'.$question.'</comment> ';
 
         return $this->getHelperSet()->get('dialog')->askHiddenResponse($this->output, $question, false);
+    }
+
+    /**
+     * Displays all cronjobs in a table.
+     *
+     * @param array $jobs
+     * @return string
+     */
+    public function displayTasks(array $jobs)
+    {
+        //
     }
 }
