@@ -128,8 +128,12 @@ trait Command {
     }
 
     /**
+<<<<<<< HEAD
      * Displays all cronjobs in a table.
      *
+=======
+     * Displays all cronjobs in a table
+>>>>>>> 47d40454636b67af61a51f6803480c49aa9b5a6e
      * @param array $jobs
      * @return string
      */
