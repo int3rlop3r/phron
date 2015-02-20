@@ -130,7 +130,6 @@ trait Command {
     /**
      * Displays all cronjobs in a table.
      *
-     * @param array $jobs
      * @return string
      */
     public function displayTasks(array $jobs)
