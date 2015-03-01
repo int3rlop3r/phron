@@ -11,6 +11,7 @@ use Symfony\Component\Console\Application;
 use Phron\Command\AddCommand;
 use Phron\Command\ShowCommand;
 use Phron\Command\DeleteCommand;
+use Phron\Command\ExplainCommand;
 
 
 /*--------------------
@@ -26,6 +27,7 @@ $entries            = new Entries($crontab, $crontabFileHandler);
 $addCommand         = new AddCommand($entries, $jobBuilder, $fieldFactory);
 $showCommand        = new ShowCommand($entries, $jobBuilder, $fieldFactory);
 $deleteCommand      = new DeleteCommand($entries, $jobBuilder, $fieldFactory);
+$explainCommand     = new ExplainCommand($entries, $jobBuilder, $fieldFactory);
 
 /*--------------------
  | Add them to the app
@@ -35,7 +37,7 @@ $app = new Application('Phron', '0.1');
 $app->add($addCommand);
 $app->add($showCommand);
 $app->add($deleteCommand);
-
+$app->add($explainCommand);
 
 /*--------------------
  | Start the app
