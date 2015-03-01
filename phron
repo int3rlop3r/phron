@@ -22,6 +22,7 @@ $crontabFileHandler = new CrontabFileHandler;
 $jobBuilder         = new JobBuilder;
 $fieldFactory       = new FieldFactory;
 $entries            = new Entries($crontab, $crontabFileHandler);
+
 $addCommand         = new AddCommand($entries, $jobBuilder, $fieldFactory);
 $showCommand        = new ShowCommand($entries, $jobBuilder, $fieldFactory);
 $deleteCommand      = new DeleteCommand($entries, $jobBuilder, $fieldFactory);

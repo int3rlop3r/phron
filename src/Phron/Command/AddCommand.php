@@ -58,11 +58,12 @@ class AddCommand extends AbstractCommand
 
     public function fire()
     {
+        $table = $this->getHelper('table');
+
         // set the name of the cron
         $name = $this->ask('Name of the task / Comments: ');
         $this->jobBuilder->setComments($name);
 
-        //$data = $this->getHelper('table');
         
         // generate the expression
         $this->askFieldQuestions();
@@ -99,7 +100,11 @@ class AddCommand extends AbstractCommand
         try
         {
             $job = $this->jobBuilder->make()->getJob();
-            if (!$this->confirm("Continue with action?"))
+
+            // Render the task
+            $this->displayTasks($table, array($job));
+
+            if ($this->confirm("Continue with action?"))
             {
                 $this->entries->add($job);
                 $this->entries->save();
