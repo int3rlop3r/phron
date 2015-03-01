@@ -5,6 +5,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Helper\TableHelper;
+use Phron\View\TaskTableView;
 
 trait Command {
 
@@ -68,7 +70,11 @@ trait Command {
 
         return $this->getHelperSet()
                     ->get('question')
-                    ->ask($this->input, $this->output, new Question($question));
+                    ->ask(
+                        $this->input, 
+                        $this->output, 
+                        new Question($question)
+                    );
     }
     
     /**
@@ -81,6 +87,7 @@ trait Command {
     {
         $dialog   = $this->getHelper("dialog");
         $question = '<comment>'.$question.'</comment> ';
+
         return $dialog->askAndValidate($this->output, $question, $validationHandler, false);
     }
     
@@ -107,7 +114,7 @@ trait Command {
      */
     public function confirm($question)
     {
-        $formattedQuestion = "<question>$question [y/n]</question>";
+        $formattedQuestion = "<question>$question [y/n]</question>: ";
         $dialog   = $this->getHelper("question");
         $question = new ConfirmationQuestion($formattedQuestion, false);
 
@@ -133,8 +140,9 @@ trait Command {
      * @param array $jobs
      * @return string
      */
-    public function displayTasks(array $jobs)
+    public function displayTasks(TableHelper $table, array $jobs)
     {
-        //
+        $headers = array('Expression', 'Command', 'Comments', 'Log File', 'Error Log');
+        TaskTableView::render($table, $this->output, $headers, $jobs);
     }
 }
