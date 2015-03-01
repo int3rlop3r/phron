@@ -55,7 +55,7 @@ trait Command {
      */
     public function writeln($message)
     {
-        return $this->output->writeln('<fg=black;bg=cyan>' . $message . '</fg=black;bg=cyan>');
+        return $this->output->writeln('<comment>' . $message . '</comment>');
     }
 
     /**
@@ -142,7 +142,14 @@ trait Command {
      */
     public function displayTasks(TableHelper $table, array $jobs)
     {
-        $headers = array('Expression', 'Command', 'Comments', 'Log File', 'Error Log');
-        TaskTableView::render($table, $this->output, $headers, $jobs);
+        $headers = array('Id', 'Expression', 'Command', 'Comments', 'Log File', 'Error Log');
+        if (empty($jobs))
+        {
+            $this->writeln("Crontab is empty.");
+        }
+        else
+        {
+            TaskTableView::render($table, $this->output, $headers, $jobs);
+        }
     }
 }

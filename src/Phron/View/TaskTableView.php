@@ -18,9 +18,12 @@ class TaskTableView
     public static function formatRows(array $rows)
     {
         $formattedRows = array();
+        $key = 0;
 
         foreach ($rows as $row) {
+            $key++;
             $formattedRows[] = array(
+                'sr_no'       => $key,
                 'expresstion' => sprintf(
                                         "%s %s %s %s %s",
                                         $row->getMinute(),

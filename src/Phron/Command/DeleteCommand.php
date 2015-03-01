@@ -41,9 +41,8 @@ class DeleteCommand extends AbstractCommand
     public function fire()
     {
         $tasksToDelete = array();
-        
         $taskIds = $this->input->getArgument('taskIds');
-        
+
         if (!empty($taskIds))
         {
             foreach ($taskIds as $taskIdString)
@@ -64,11 +63,13 @@ class DeleteCommand extends AbstractCommand
                 }
             }
             
-            $confirmation = $this->ask('Delete ' . count($tasksToDelete) . ' task(s)? ');
-            
-            if (strtolower($confirmation) == 'yes' || strtolower($confirmation) == 'y')
+            if ($this->confirm('Delete ' . count($tasksToDelete) . ' task(s)? '))
             {
-                $this->entries->deleteByIds($tasksToDelete);
+                foreach ($tasksToDelete as $taskId)
+                {
+                    $this->entries->delete($taskId);
+                }
+                $this->entries->save();
             }
             else
             {
@@ -77,11 +78,9 @@ class DeleteCommand extends AbstractCommand
         }
         else
         {
-            $confirmation = $this->ask('Delete all tasks? ');
-            
-            if (strtolower($confirmation) == 'yes' || strtolower($confirmation) == 'y')
+            if ($this->confirm('Delete all tasks? '))
             {
-                $this->entries->clear();
+                $this->entries->clear()->save();
             }
             else
             {
