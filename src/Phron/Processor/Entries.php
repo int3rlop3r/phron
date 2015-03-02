@@ -95,6 +95,37 @@ class Entries
     }
 
     /**
+     * Parses the id expression string.
+     * eg: 1-5 => array(1, 2, 3, 4, 5)
+     *
+     * @param array $ids
+     * @return array
+     */
+    public function parseIds(array $ids)
+    {
+        $parsedIds = array();
+
+        foreach ($ids as $id)
+        {
+            if (strpos($id, '-') !== false)
+            {
+                $idParts = explode('-', $id);
+
+                if (count($idParts) != 2) { continue; }
+                
+                $idRange   = range(intval($idParts[0]), intval($idParts[1]));
+                $parsedIds = array_merge($parsedIds, $idRange);
+            }
+            else
+            {
+                $parsedIds[] = intval($id);
+            }
+        }
+
+        return array_unique($parsedIds);
+    }
+
+    /**
      * Adds a cron
      * 
      * @param Job $job
@@ -188,20 +219,90 @@ class Entries
         $result = array();
         $jobs   = $this->all();
         
-        foreach ($ids as $id)
+        foreach ($ids as $hash => $id)
         {
             $tmpJob = $this->find($id);
             
             if (is_null($tmpJob)) { continue; }
             
-            $result[] = $tmpJob;
+            $result[$hash] = $tmpJob;
         }
         
         return $result;
     }
+
+    /**
+     * Write filtered crons to file.
+     *
+     * @param string $filepath
+     * @param array $ids 
+     * @return bool
+     */
+    public function dumpToFile($filepath, array $ids = array())
+    {
+        $taskBuffer = '';
+
+        if (empty($ids))
+        {
+            $jobs = $this->all();
+        }
+        else
+        {
+            $jobs = $this->in($ids);
+        }
+
+        if (empty($jobs))
+        {
+            return false;
+        }
+
+        foreach ($jobs as $job)
+        {
+            $taskBuffer .= $job->render() . PHP_EOL;
+        }
+
+        return file_put_contents($filepath, $taskBuffer);
+    }
+
+    /**
+     * Get the hashes of jobs by the ids given.
+     *
+     * @todo write test
+     * @param array $ids
+     * @return array List of hashes
+     */
+    public function getJobHashes($ids, $jobs = null)
+    {
+        if (is_null($jobs))
+        {
+            $jobs = $this->in($ids);
+        }
+
+        return array_keys($jobs);
+    }
+
+    /**
+     * Deletes a job by ids.
+     *
+     * @param array $ids
+     * @return $this
+     */
+    public function deleteByIds($ids)
+    {
+        $jobs = $this->in($ids);
+        $hashes = $this->getJobHashes($ids, $jobs);
+
+        foreach ($hashes as $hash)
+        {
+            $job = $jobs[$hash];
+            $this->crontab->removeJob($job);
+        }
+
+        return $this;
+    }
     
     /**
-     * Delete tasks by ids
+     * Delete tasks by ids.
      * 
      * @param mixed $ids could either be an array of ids or a single id
      * @return $this
@@ -210,20 +311,11 @@ class Entries
     {
         if (is_array($ids))
         {
-            foreach ($ids as $id)
-            {
-                $aJob = $this->find(intval($id) - 1);
-
-                if ($aJob instanceof Job)
-                {
-                    $this->crontab->removeJob($aJob);
-                }
-            }
+            $this->deleteByIds($ids);
         }
         else
         {
             $job = $this->find($ids);
-            
             if ($job instanceof Job)
             {
                 $this->crontab->removeJob($job);

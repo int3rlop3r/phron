@@ -29,14 +29,10 @@ class EntriesTest extends PHPUnit_Framework_TestCase
 
         $this->crontabFile     = $pathToFixture . '/crontabFile';
         $this->crontabDataFile = $pathToFixture . '/crontabDataFile';
-
         $this->resetFile();
-
         $this->crontabFileHandler = new CrontabFileHandler;
-
         $this->crontab = new Crontab;
         $this->entries = new Entries($this->crontab, $this->crontabFileHandler);
-
         $this->jobBuilder = new JobBuilder;
     }
 
@@ -53,20 +49,14 @@ class EntriesTest extends PHPUnit_Framework_TestCase
     public function testFileGetterAndSetter()
     {
         $this->assertNull($this->entries->getCrontabFile());
-
-        $filename = $this->entries
-                        ->setCrontabFile($this->crontabFile)
-                        ->getCrontabFile();
-
+        $filename = $this->entries->setCrontabFile($this->crontabFile)->getCrontabFile();
         $this->assertEquals($this->crontabFile, $filename);
     }
 
     public function testLoadFromFile()
     {
         $this->entries->loadFromFile($this->crontabDataFile);
-        
         $this->assertEquals(4, count($this->entries->all()));
-
         $this->entries->clear(); // remove all cronjobs
     }
 
@@ -82,7 +72,6 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         $crontab5 = $crontabs[4];
 
         $job1 = new Job;
-
         $job1->setMonth($crontab1['minute'])
             ->setHour($crontab1['hour'])
             ->setDayOfMonth($crontab1['dayOfMonth'])
@@ -92,12 +81,10 @@ class EntriesTest extends PHPUnit_Framework_TestCase
             ->setLogFile($crontab1['logFile'])
             ->setErrorFile($crontab1['errorFile'])
             ->setComments($crontab1['comment']);
-
         $this->entries->add($job1);
         $this->assertEquals(1, count($this->entries->all()));
 
         $job2 = new Job;
-
         $job2->setMonth($crontab2['minute'])
             ->setHour($crontab2['hour'])
             ->setDayOfMonth($crontab2['dayOfMonth'])
@@ -107,12 +94,10 @@ class EntriesTest extends PHPUnit_Framework_TestCase
             ->setLogFile($crontab2['logFile'])
             ->setErrorFile($crontab2['errorFile'])
             ->setComments($crontab2['comment']);
-
         $this->entries->add($job2);
         $this->assertEquals(2, count($this->entries->all()));
 
         $job3 = new Job;
-
         $job3->setMonth($crontab3['minute'])
             ->setHour($crontab3['hour'])
             ->setDayOfMonth($crontab3['dayOfMonth'])
@@ -122,12 +107,10 @@ class EntriesTest extends PHPUnit_Framework_TestCase
             ->setLogFile($crontab3['logFile'])
             ->setErrorFile($crontab3['errorFile'])
             ->setComments($crontab3['comment']);
-
         $this->entries->add($job3);
         $this->assertEquals(3, count($this->entries->all()));
 
         $job4 = new Job;
-
         $job4->setMonth($crontab4['minute'])
             ->setHour($crontab4['hour'])
             ->setDayOfMonth($crontab4['dayOfMonth'])
@@ -137,12 +120,10 @@ class EntriesTest extends PHPUnit_Framework_TestCase
             ->setLogFile($crontab4['logFile'])
             ->setErrorFile($crontab4['errorFile'])
             ->setComments($crontab4['comment']);
-
         $this->entries->add($job4);
         $this->assertEquals(4, count($this->entries->all()));
 
         $job5 = new Job;
-
         $job5->setMonth($crontab5['minute'])
             ->setHour($crontab5['hour'])
             ->setDayOfMonth($crontab5['dayOfMonth'])
@@ -152,11 +133,11 @@ class EntriesTest extends PHPUnit_Framework_TestCase
             ->setLogFile($crontab5['logFile'])
             ->setErrorFile($crontab5['errorFile'])
             ->setComments($crontab5['comment']);
-
         $this->entries->add($job5);
         $this->assertEquals(5, count($this->entries->all()));
-        
-        $this->entries->clear(); // remove all cronjobs
+
+        // remove all cronjobs
+        $this->entries->clear(); 
     }
 
     public function crontabProvider()
@@ -401,5 +382,17 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         $task->setMinute(15);
 
         $this->assertEquals(15, $task->getMinute());
+    }
+
+    public function testParseIds()
+    {
+        $this->assertEquals($this->entries->parseIds(array()), array());
+        $this->assertEquals($this->entries->parseIds(array('1-5')), array(1, 2, 3, 4, 5));
+        $this->assertEquals($this->entries->parseIds(array(1, 2, 3, '7-9')), array(1, 2, 3, 7, 8, 9));
+    }
+
+    public function testDeleteByIds()
+    {
+        // @todo
     }
 }

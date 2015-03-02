@@ -12,6 +12,7 @@ use Phron\Command\AddCommand;
 use Phron\Command\ShowCommand;
 use Phron\Command\DeleteCommand;
 use Phron\Command\ExplainCommand;
+use Phron\Command\DumpCommand;
 
 
 /*--------------------
@@ -28,6 +29,7 @@ $addCommand         = new AddCommand($entries, $jobBuilder, $fieldFactory);
 $showCommand        = new ShowCommand($entries, $jobBuilder, $fieldFactory);
 $deleteCommand      = new DeleteCommand($entries, $jobBuilder, $fieldFactory);
 $explainCommand     = new ExplainCommand($entries, $jobBuilder, $fieldFactory);
+$dumpCommand        = new DumpCommand($entries, $jobBuilder, $fieldFactory);
 
 /*--------------------
  | Add them to the app
@@ -38,6 +40,7 @@ $app->add($addCommand);
 $app->add($showCommand);
 $app->add($deleteCommand);
 $app->add($explainCommand);
+$app->add($dumpCommand);
 
 /*--------------------
  | Start the app
