@@ -3,7 +3,9 @@
 use Cron\FieldFactory;
 use Phron\Processor\JobBuilder;
 use Phron\Processor\Entries;
+use Phron\Processor\FileOutput;
 use Phron\Processor\Questions\QuestionFactory;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Cron\CronExpression;
 
@@ -17,14 +19,18 @@ class DumpCommand extends AbstractCommand
     
     public function configure()
     {
-        $description = 'task id(s) to delete [eg: 1 2 3 '
-            . 'will delete tasks 1, 2 & 3. 1-5 will delete tasks 1, 2, 3, 4, 5]';
+        $description = 'task id(s) to dump [eg: 1 2 3 will output tasks 1, 2 & 3. 1-5 will output tasks 1, 2, 3, 4, 5]';
 
         $this->setName('dump')
              ->setDescription('Dumps selected tasks to a file.')
              ->setHelp('phron dump <ids>')
-             ->addArgument('outputfile', InputArgument::REQUIRED, 'file to write to')
-             ->addArgument('ids', InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
+             ->addArgument(
+                 'ids', 
+                 InputArgument::OPTIONAL | 
+                 InputArgument::IS_ARRAY, 
+                 $description
+             )
+             ->addOption('file', null, InputOption::VALUE_REQUIRED, 'Where to dump?');
     }
 
     public function fire()
@@ -32,9 +38,10 @@ class DumpCommand extends AbstractCommand
         $taskBuffer     = '';
         $taskIdsToDump  = array();
         $taskIdsString  = $this->input->getArgument('ids');
-        $taskOutputFile = $this->input->getArgument('outputfile');
+        $taskOutputFile = $this->input->getOption('file');
 
+        $output  = is_null($taskOutputFile) ? $this->output: new FileOutput($taskOutputFile);
         $taskIds = $this->entries->parseIds($taskIdsString);
-        $this->entries->dumpToFile($taskOutputFile, $taskIds);
+        $this->entries->dump($taskIds, $output);
     }
 }
