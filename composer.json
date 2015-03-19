@@ -1,7 +1,8 @@
 {
     "name": "int3rlop3r/phron",
     "description": "Handle cron tabs with php",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "license": "MIT",
     "authors": [
         {
             "name": "Jonathan Fernandes",
@@ -18,5 +19,10 @@
     },
     "autoload": {
         "psr-4": {"Phron\\": "src/Phron"}
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
     }
 }
