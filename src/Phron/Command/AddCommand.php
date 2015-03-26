@@ -13,11 +13,6 @@ use Phron\Processor\Questions\QuestionFactory;
 
 class AddCommand extends AbstractCommand
 {
-    public function __construct(Entries $entries, JobBuilder $jobBuilder, FieldFactory $fieldFactory)
-    {
-        parent::__construct($entries, $jobBuilder, $fieldFactory);
-    }
-    
     public function configure()
     {
         $this->setName('add')
