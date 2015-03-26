@@ -10,6 +10,7 @@
         }
     ],
     "require": {
+        "php": ">=5.4.0",
         "mtdowling/cron-expression": "1.0.*",
         "yzalis/Crontab": "dev-master",
         "symfony/console": "2.6.*"
@@ -24,5 +25,8 @@
         "branch-alias": {
             "dev-master": "0.1.x-dev"
         }
-    }
+    },
+    "bin": [
+        "phron"
+    ]
 }
