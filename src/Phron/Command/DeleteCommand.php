@@ -13,16 +13,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class DeleteCommand extends AbstractCommand
 {
-    /**
-     * @param Entries $entries
-     * @param JobBuilder $jobBuilder
-     * @param FieldFactory $fieldFactory
-     */
-    public function __construct(Entries $entries, JobBuilder $jobBuilder, FieldFactory $fieldFactory)
-    {
-        parent::__construct($entries, $jobBuilder, $fieldFactory);
-    }
-    
     public function configure()
     {
         $description = 'task id(s) to delete [eg: 1 2 3 will delete tasks '

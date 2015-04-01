@@ -14,16 +14,6 @@ use Symfony\Component\Process\Exception\InvalidArgumentException;
 
 class ShowCommand extends AbstractCommand
 {
-    /**
-     * @param Entries $entries
-     * @param JobBuilder $jobBuilder
-     * @param FieldFactory $fieldFactory
-     */
-    public function __construct(Entries $entries, JobBuilder $jobBuilder, FieldFactory $fieldFactory)
-    {
-        parent::__construct($entries, $jobBuilder, $fieldFactory);
-    }
-    
     public function configure()
     {
         $this->setName('show')

@@ -12,11 +12,6 @@ use Cron\CronExpression;
 
 class DumpCommand extends AbstractCommand
 {
-    public function __construct(Entries $entries, JobBuilder $jobBuilder, FieldFactory $fieldFactory)
-    {
-        parent::__construct($entries, $jobBuilder, $fieldFactory);
-    }
-    
     public function configure()
     {
         $description = 'task id(s) to dump [eg: 1 2 3 will output tasks 1, 2 & 3. 1-5 will output tasks 1, 2, 3, 4, 5]';

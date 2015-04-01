@@ -60,16 +60,10 @@ class JobBuilderTest extends PHPUnit_Framework_TestCase
         // Test Error File
         $this->assertEquals('/tmp/errorfile', $this->jobBuilder->setErrorFile('/tmp/errorfile')->getErrorFile());
 
-        // Test Job
-        $job = $this->jobBuilder->make()->getJob();
-        $this->assertInstanceOf('Crontab\Job', $job);
-
-        // Test Job
-        $job = $this->jobBuilder->make()->getJob();
-        $this->assertInstanceOf('Crontab\Job', $job);
-
         // Check if job was created as expected
-        
+        $job = $this->jobBuilder->make()->getJob();
+        $this->assertInstanceOf('Crontab\Job', $job);
+
         // Check fields
         foreach ($fieldList as $field => $methodName)
         {
