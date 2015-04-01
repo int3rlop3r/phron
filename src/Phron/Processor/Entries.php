@@ -289,15 +289,16 @@ class Entries
      */
     public function deleteByIds($ids)
     {
-        $jobs = $this->in($ids);
-        $hashes = $this->getJobHashes($ids, $jobs);
-
-        foreach ($hashes as $hash)
+        $jobs = $this->all();
+        $hashes = array_keys($jobs);
+        
+        foreach ($ids as $id)
         {
-            $job = $jobs[$hash];
-            $this->crontab->removeJob($job);
+            $id = $id - 1;
+            $job = $hashes[$id];
+            $this->crontab->removeJob($jobs[$job]);
         }
-
+        
         return $this;
     }
     
