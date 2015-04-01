@@ -30,12 +30,17 @@ class DeleteCommand extends AbstractCommand
         $tasksToDelete = $this->entries->parseIds($taskIds);
         $message = 'Cancelled';
 
-        if (!empty($taskIds) && $this->confirm('Delete ' . count($tasksToDelete) . ' task(s)? '))
+        if (empty($tasksToDelete))
+        {
+            $message = 'Invalid argument';
+        }
+        
+        if (!empty($taskIds) && !empty($tasksToDelete) && $this->confirm('Delete ' . count($tasksToDelete) . ' task(s)? '))
         {
                 $this->entries->delete($tasksToDelete);
                 $message = 'Done';
         }
-        elseif ($this->confirm('Delete all tasks? '))
+        elseif (!empty($tasksToDelete) && $this->confirm('Delete all tasks? '))
         {
                 $this->entries->clear();
                 $message = 'Done';

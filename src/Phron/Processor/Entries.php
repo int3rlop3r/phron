@@ -96,6 +96,19 @@ class Entries
     }
 
     /**
+     * Validates the id expression string
+     *
+     * @param $id
+     * @return boolean
+     */
+
+    public function validateDeleteInput($id)
+    {
+        return preg_match('/^\d{1,}((-)\d{1,}|\d{0,}?)$/',$id);
+    }
+
+
+    /**
      * Parses the id expression string.
      * eg: 1-5 => array(1, 2, 3, 4, 5)
      *
@@ -105,14 +118,17 @@ class Entries
     public function parseIds(array $ids)
     {
         $parsedIds = array();
+        
+        foreach ($ids as $id)
+        {
+            if (!$this->validateDeleteInput($id)) { return $parsedIds; }
+        }
 
         foreach ($ids as $id)
         {
             if (strpos($id, '-') !== false)
             {
                 $idParts = explode('-', $id);
-
-                if (count($idParts) != 2) { continue; }
                 
                 $idRange   = range(intval($idParts[0]), intval($idParts[1]));
                 $parsedIds = array_merge($parsedIds, $idRange);
@@ -291,14 +307,16 @@ class Entries
     {
         $jobs = $this->all();
         $hashes = array_keys($jobs);
-        
-        foreach ($ids as $id)
+
+        if (!empty($hashes))
         {
-            $id = $id - 1;
-            $job = $hashes[$id];
-            $this->crontab->removeJob($jobs[$job]);
+            foreach ($ids as $id)
+            {
+                $id = $id - 1;
+                $job = $hashes[$id];
+                $this->crontab->removeJob($jobs[$job]);
+            }
         }
-        
         return $this;
     }
     
