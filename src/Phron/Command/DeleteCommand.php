@@ -6,9 +6,6 @@
  * @author jonathan
  */
 
-use Cron\FieldFactory;
-use Phron\Processor\Entries;
-use Phron\Processor\JobBuilder;
 use Symfony\Component\Console\Input\InputArgument;
 
 class DeleteCommand extends AbstractCommand

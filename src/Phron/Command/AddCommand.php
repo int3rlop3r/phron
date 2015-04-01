@@ -6,9 +6,6 @@
  * @author jonathan
  */
 
-use Cron\FieldFactory;
-use Phron\Processor\JobBuilder;
-use Phron\Processor\Entries;
 use Phron\Processor\Questions\QuestionFactory;
 
 class AddCommand extends AbstractCommand

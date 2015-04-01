@@ -81,39 +81,6 @@ class JobBuilder
      * Gets the value of a field
      * 
      * @param string $item Cron expression field
-     * @return string Value of the field
-     */
-    public function getFieldValueTest($item)
-    {
-        $this->validField($item);
-
-        $function = 'get' . $this->fields[$item]; // = $value;
-
-        return $this->job->$function();
-    }
-
-    /**
-     * Set the value of a field
-     * 
-     * @param string $item Cron Expression Field
-     * @param string $value Value of the field
-     * @return $this
-     */
-    public function setFieldValueTest($item, $value)
-    {
-        $this->validField($item);
-
-        $function = 'set' . $this->fields[$item]; // = $value;
-
-        $this->job->$function($value);
-
-        return $this;
-    }
-
-    /**
-     * Gets the value of a field
-     * 
-     * @param string $item Cron expression field
      * @return string
      */
     public function getFieldValue($item)
@@ -145,15 +112,6 @@ class JobBuilder
 
         return $this;
     }
-
-
-        /*
-         *'minutes'    => 'Minute',
-         *'hour'       => 'Hour',
-         *'dayofmonth' => 'DayOfMonth',
-         *'month'      => 'Month',
-         *'dayofweek'  => 'DayOfWeek',
-         */
 
     /**
      * Set the minute

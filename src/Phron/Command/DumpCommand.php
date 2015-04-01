@@ -1,14 +1,8 @@
 <?php namespace Phron\Command;
 
-use Cron\FieldFactory;
-use Phron\Processor\JobBuilder;
-use Phron\Processor\Entries;
 use Phron\Processor\FileOutput;
-use Phron\Processor\Questions\QuestionFactory;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Cron\CronExpression;
-
 
 class DumpCommand extends AbstractCommand
 {

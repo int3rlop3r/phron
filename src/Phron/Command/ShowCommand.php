@@ -6,12 +6,6 @@
  * @author jonathan
  */
 
-use Cron\FieldFactory;
-use Phron\Processor\JobBuilder;
-use Phron\Processor\Entries;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Process\Exception\InvalidArgumentException;
-
 class ShowCommand extends AbstractCommand
 {
     public function configure()
