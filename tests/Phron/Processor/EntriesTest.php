@@ -369,8 +369,8 @@ class EntriesTest extends PHPUnit_Framework_TestCase
         
         $this->assertCount(2, $jobArray);
         
-        $this->assertEquals('cmd2', $jobArray[0]->getCommand());
-        $this->assertEquals('cmd4', $jobArray[1]->getCommand());
+        $this->assertEquals('cmd2', array_shift($jobArray)->getCommand());
+        $this->assertEquals('cmd4', array_shift($jobArray)->getCommand());
     }
     
     public function testUpdate()

@@ -219,14 +219,12 @@ class Entries
     {
         $result = array();
         $jobs   = $this->all();
-        
-        foreach ($ids as $hash => $id)
+        $keys   = array_keys($jobs);
+
+        foreach ($ids as $id)
         {
-            $tmpJob = $this->find($id);
-            
-            if (is_null($tmpJob)) { continue; }
-            
-            $result[$hash] = $tmpJob;
+            $hash = $keys[($id - 1)];
+            $result[$hash] = $jobs[$hash];
         }
         
         return $result;
