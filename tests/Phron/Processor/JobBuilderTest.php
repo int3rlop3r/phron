@@ -79,7 +79,7 @@ class JobBuilderTest extends PHPUnit_Framework_TestCase
 
         // Clear everything
         $this->jobBuilder->clear();
-        $this->assertNull($this->jobBuilder->getJob());
+        $this->assertEquals($this->jobBuilder->getJob(), new Job);
     }
 
 }

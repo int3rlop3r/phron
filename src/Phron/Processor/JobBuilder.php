@@ -51,6 +51,15 @@ class JobBuilder
     private $job;
 
     /**
+     * Create a new Job instance that will be used to build
+     * a new job
+     */
+    public function __construct()
+    {
+        $this->job = new Job;
+    }
+
+    /**
      * Checks if the field name was valid
      * 
      * @param string $item Cron expression field
@@ -334,7 +343,7 @@ class JobBuilder
     public function clear()
     {
         $this->jobContainer = array();
-        $this->job          = null;
+        $this->job          = new Job;
         
         return $this;
     }
@@ -346,26 +355,12 @@ class JobBuilder
      */
     public function make()
     {
-        $job = new Job;
 
         foreach ($this->jobContainer as $callbackPart => $cronData)
         {
             $callback = 'set' . $callbackPart;
-            \call_user_func_array(array($job, $callback), array($cronData));
+            \call_user_func_array(array($this->job, $callback), array($cronData));
         }
-
-        return $this->setJob($job);
-    }
-
-    /**
-     * Sets the job
-     *
-     * @param Job $job
-     * @return $this
-     */
-    public function setJob(Job $job)
-    {
-        $this->job = $job;
 
         return $this;
     }
